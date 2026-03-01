@@ -13,13 +13,6 @@ Spring Boot Flower Shop Project — это веб-приложение для у
 
 Просмотр каталога цветов. Самостоятельная сборка букета. Добавление товаров в корзину. Оформление заказа.
 
-Лабораторная  № 1 : Basic REST service
-1. Создано Spring Boot приложение.
-2. Реализовано REST API для одной ключевой сущности Flower.
-3. Реализованы GET endpoint в FlowerController:
-- GET запрос /{id} с использованием @PathVariable (метод getFlowerByCatalogNumber).
-- GET запрос с использованием @RequestParam (метод getFlowersByColor).
-4. Реализованы слои: FlowerController → FlowerService → FlowerRepository.
-5. Реализовано DTO (FlowerDto) и маппер (FlowerMapper) между Entity (Flower) и API-ответом.
+
 
 Ссылка Sonar : https://sonarcloud.io/api/project_badges/measure?project=MariaTukailo_flower_shop&metric=alert_status

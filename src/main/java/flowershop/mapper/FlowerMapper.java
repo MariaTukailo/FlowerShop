@@ -16,6 +16,7 @@ public class FlowerMapper {
         }
 
         FlowerDto flowerDto = new FlowerDto();
+        flowerDto.setId(flower.getId());
         flowerDto.setCatalogNumber(flower.getCatalogNumber());
         flowerDto.setName(flower.getName());
         flowerDto.setPrice(flower.getPrice());
@@ -23,4 +24,21 @@ public class FlowerMapper {
 
         return flowerDto;
     }
+
+    public static Flower toEntity(FlowerDto dto) {
+        if (dto == null) {
+            return null;
+        }
+
+        Flower flower = new Flower();
+        flower.setId(dto.getId());
+        flower.setCatalogNumber(dto.getCatalogNumber());
+        flower.setName(dto.getName());
+        flower.setPrice(dto.getPrice());
+        flower.setColor(dto.getColor());
+
+        return flower;
+    }
 }
+
+
