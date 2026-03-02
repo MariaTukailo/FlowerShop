@@ -60,12 +60,7 @@ public class FlowerService {
 
         Flower updated = flowerRepository.save(flower);
 
-        bouquetRepository.findAll().stream()
-                .filter(b -> b.getFlowers().contains(updated))
-                .forEach(b -> {
-                    b.calculateTotalCost();
-                    bouquetRepository.save(b);
-                });
+
 
         return FlowerMapper.toDto(updated);
     }

@@ -38,10 +38,7 @@ public class ShoppingCartService {
         cart.getBouquets().add(bouquet);
 
 
-        double total = cart.getBouquets().stream()
-                .mapToDouble(Bouquet::getTotalCost)
-                .sum();
-        cart.setTotalCost(total);
+
 
         return shoppingCartRepository.save(cart);
     }
@@ -53,10 +50,7 @@ public class ShoppingCartService {
 
         cart.getBouquets().remove(bouquet);
 
-        double total = cart.getBouquets().stream()
-                .mapToDouble(Bouquet::getTotalCost)
-                .sum();
-        cart.setTotalCost(total);
+
 
         return shoppingCartRepository.save(cart);
     }
@@ -66,7 +60,7 @@ public class ShoppingCartService {
         ShoppingCart cart = getByCustomerId(customerId);
 
         cart.getBouquets().clear();
-        cart.setTotalCost(0.0);
+
 
         shoppingCartRepository.save(cart);
     }

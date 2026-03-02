@@ -29,7 +29,7 @@ public class Order {
 
     private LocalDateTime date;
     private String status;
-    private double totalCost;
+
 
     @ElementCollection
     @CollectionTable(name = "order_items", joinColumns = @JoinColumn(name = "order_id"))

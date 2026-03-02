@@ -41,11 +41,11 @@ public class OrderService {
         Order order = new Order();
         order.setDate(LocalDateTime.now());
         order.setStatus("ПРИНЯТ");
-        order.setTotalCost(cart.getTotalCost());
+
 
 
         List<String> receipt = cart.getBouquets().stream()
-                .map(b -> b.getName() + " — " + b.getTotalCost() + " руб.")
+                .map(b -> b.getName() + "+" )
                 .toList();
         order.setItems(new ArrayList<>(receipt));
 

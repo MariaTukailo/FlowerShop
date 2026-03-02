@@ -31,7 +31,7 @@ public class BouquetService {
     @Transactional
     public Bouquet save(Bouquet bouquet) {
 
-        bouquet.setTotalCost(bouquet.calculateTotalCost());
+
         return bouquetRepository.save(bouquet);
     }
 
@@ -50,7 +50,7 @@ public class BouquetService {
         }
 
 
-        bouquet.setTotalCost(bouquet.calculateTotalCost());
+
         return bouquetRepository.save(bouquet);
     }
 

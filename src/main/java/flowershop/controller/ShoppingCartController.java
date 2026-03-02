@@ -33,7 +33,6 @@ public class ShoppingCartController {
         return shoppingCartService.removeBouquet(customerId, bouquetId);
     }
 
-
     @DeleteMapping("/{customerId}/clear")
     public void clearCart(@PathVariable Long customerId) {
         shoppingCartService.clear(customerId);

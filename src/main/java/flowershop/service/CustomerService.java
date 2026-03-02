@@ -22,7 +22,7 @@ public class CustomerService {
         customer.setPhoneNumber(phone);
 
         ShoppingCart cart = new ShoppingCart();
-        cart.setTotalCost(0.0);
+
         customer.setCart(cart);
 
         customerRepository.save(customer);

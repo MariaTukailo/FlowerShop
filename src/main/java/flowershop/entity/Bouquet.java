@@ -32,7 +32,7 @@ public class Bouquet {
     private String name;
     private boolean wrappingPaper;
     private boolean ribbon;
-    private double totalCost;
+
 
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
@@ -44,12 +44,4 @@ public class Bouquet {
     private List<Flower> flowers = new ArrayList<>();
 
 
-    public double calculateTotalCost() {
-        if (flowers == null || flowers.isEmpty()) {
-            return 0.0;
-        }
-        return flowers.stream()
-                .mapToDouble(Flower::getPrice)
-                .sum();
-    }
 }
