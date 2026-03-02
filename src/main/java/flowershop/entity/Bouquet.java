@@ -34,7 +34,6 @@ public class Bouquet {
     private boolean ribbon;
 
 
-
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinTable(
             name = "bouquet_flowers",
