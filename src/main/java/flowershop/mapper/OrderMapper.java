@@ -20,6 +20,8 @@ public class OrderMapper {
         OrderDto dto = new OrderDto();
         dto.setId(order.getId());
         dto.setDate(order.getDate());
+        dto.setDeliveryDate(order.getDeliveryDate());
+        dto.setDeliveryTime(order.getDeliveryTime());
         dto.setFinalPrice(order.getFinalPrice());
         if (order.getStatus() != null) {
 
@@ -47,6 +49,8 @@ public class OrderMapper {
         Order order = new Order();
         order.setId(dto.getId());
         order.setDate(dto.getDate());
+        order.setDeliveryDate(dto.getDeliveryDate());
+        order.setDeliveryTime(dto.getDeliveryTime());
         order.setFinalPrice(dto.getFinalPrice());
         order.setStatus(OrderStatus.fromString(dto.getStatus()));
         order.setBouquets(new ArrayList<>());

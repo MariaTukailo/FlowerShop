@@ -45,9 +45,9 @@ public class BouquetMapper {
 
         Bouquet bouquet = new Bouquet();
         bouquet.setId(dto.getId());
+        bouquet.setPrice(dto.getPrice());
         bouquet.setName(dto.getName());
         bouquet.setActive(dto.isActive());
-        bouquet.setPrice(dto.getPrice());
         bouquet.setWrappingPaper(dto.isWrappingPaper());
         bouquet.setRibbon(dto.isRibbon());
         bouquet.setCountFlowers(dto.getCountFlowers());

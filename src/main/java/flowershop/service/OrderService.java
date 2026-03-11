@@ -1,5 +1,6 @@
 package flowershop.service;
 
+import flowershop.components.CustomerHashMap;
 import flowershop.dto.OrderDto;
 import flowershop.entity.Bouquet;
 import flowershop.entity.Order;
@@ -14,8 +15,10 @@ import org.springframework.transaction.annotation.Transactional;
 import flowershop.entity.Customer;
 import flowershop.repository.CustomerRepository;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +29,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final CustomerRepository customerRepository;
     private final ShoppingCartRepository shoppingCartRepository;
+    private final CustomerHashMap hashMap;
 
     private Order findEntityById(Long id) {
         return orderRepository.findById(id).orElse(null);
@@ -44,14 +48,18 @@ public class OrderService {
     }
 
 
-
     @Transactional
-    public OrderDto createFromCart(Long customerId) {
+    public OrderDto createFromCart(Long customerId, LocalDate deliveryDate, LocalTime deliveryTime) {
+
+        if (deliveryDate == null || deliveryTime == null) {
+            return null;
+        }
 
         Customer customer = customerRepository.findById(customerId).orElse(null);
         if (customer == null || customer.getCart() == null) {
             return null;
         }
+
 
         ShoppingCart cart = customer.getCart();
         List<Bouquet> bouquetsInCart = cart.getBouquets();
@@ -72,7 +80,8 @@ public class OrderService {
         order.setCustomer(customer);
         order.setDate(LocalDateTime.now());
         order.setStatus(OrderStatus.PROCESSING);
-
+        order.setDeliveryDate(deliveryDate);
+        order.setDeliveryTime(deliveryTime);
 
         order.setBouquets(new ArrayList<>(bouquetsInCart));
 
@@ -85,6 +94,8 @@ public class OrderService {
         cart.getBouquets().clear();
         shoppingCartRepository.save(cart);
 
+        hashMap.clear();
+
         return OrderMapper.toDto(orderRepository.save(order));
     }
 
@@ -92,10 +103,16 @@ public class OrderService {
     public OrderDto updateStatus(Long id, String statusValue) {
         Order order = findEntityById(id);
 
+        if (order == null) {
+            return null;
+        }
+
         OrderStatus newStatus = OrderStatus.fromString(statusValue);
         if (newStatus != null) {
             order.setStatus(newStatus);
         }
+
+        hashMap.clear();
 
         return OrderMapper.toDto(orderRepository.save(order));
     }

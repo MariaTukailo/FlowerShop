@@ -6,6 +6,7 @@ public enum OrderStatus {
     PROCESSING("Обработка"),
     ACCEPTED("Принят"),
     IN_TRANSIT("В пути"),
+    CANCELLED("Отменен"),
     DELIVERED("Доставлен");
 
     private final String russianName;

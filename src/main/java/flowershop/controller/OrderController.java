@@ -3,6 +3,7 @@ package flowershop.controller;
 import flowershop.dto.OrderDto;
 import flowershop.service.OrderService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @RestController
@@ -28,22 +31,18 @@ public class OrderController {
 
     @GetMapping("/{id}")
     public OrderDto findById(@PathVariable Long id) {
-        OrderDto orderDto = orderService.findById(id);
-        if (orderDto == null) {
-            return null;
-        }
-        return orderDto;
+        return orderService.findById(id);
     }
 
 
     @PostMapping("/checkout/{customerId}")
-    public OrderDto createFromCart(@PathVariable Long customerId) {
-        OrderDto orderDto = orderService.createFromCart(customerId);
-        if (orderDto == null) {
+    public OrderDto createFromCart(
+            @PathVariable Long customerId,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate deliveryDate,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime deliveryTime) {
 
-            return null;
-        }
-        return orderDto;
+
+        return orderService.createFromCart(customerId, deliveryDate, deliveryTime);
     }
 
 

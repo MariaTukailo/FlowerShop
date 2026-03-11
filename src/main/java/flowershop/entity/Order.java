@@ -2,7 +2,9 @@ package flowershop.entity;
 
 import flowershop.enums.OrderStatus;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -38,6 +40,8 @@ public class Order {
 
     private LocalDateTime date;
     private double finalPrice;
+    private LocalDate deliveryDate;
+    private LocalTime deliveryTime;
 
     @Enumerated(EnumType.STRING)
     @JdbcTypeCode(SqlTypes.NAMED_ENUM)

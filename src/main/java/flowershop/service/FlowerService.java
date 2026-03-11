@@ -1,5 +1,6 @@
 package flowershop.service;
 
+import flowershop.components.CustomerHashMap;
 import flowershop.dto.FlowerDto;
 import flowershop.enums.Color;
 import flowershop.mapper.FlowerMapper;
@@ -19,6 +20,7 @@ public class FlowerService {
 
     private final FlowerRepository flowerRepository;
     private final BouquetRepository bouquetRepository;
+    private final CustomerHashMap hashMap;
 
     private Flower findEntityById(Long id) {
 
@@ -84,6 +86,8 @@ public class FlowerService {
         flower.setActive(dto.isActive());
         flower.setPrice(dto.getPrice());
         flower.setColor(Color.fromString(dto.getColor()));
+
+        hashMap.clear();
 
         return FlowerMapper.toDto(flowerRepository.save(flower));
     }
