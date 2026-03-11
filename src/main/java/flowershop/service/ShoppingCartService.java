@@ -29,13 +29,12 @@ public class ShoppingCartService {
     }
 
 
-
     @Transactional
     public void addBouquet(Long cartId, Long bouquetId) {
         ShoppingCart cart = findEntityById(cartId);
         Bouquet bouquet = bouquetRepository.findById(bouquetId).orElse(null);
 
-        if (cart != null && bouquet != null) {
+        if (bouquet != null) {
 
             cart.getBouquets().add(bouquet);
             shoppingCartRepository.save(cart);
@@ -48,7 +47,7 @@ public class ShoppingCartService {
         ShoppingCart cart = findEntityById(cartId);
         Bouquet bouquet = bouquetRepository.findById(bouquetId).orElse(null);
 
-        if (cart != null && bouquet != null) {
+        if (bouquet != null) {
             cart.getBouquets().remove(bouquet);
             shoppingCartRepository.save(cart);
         }
@@ -58,9 +57,9 @@ public class ShoppingCartService {
     @Transactional
     public void clearCart(Long cartId) {
         ShoppingCart cart = findEntityById(cartId);
-        if (cart != null) {
-            cart.getBouquets().clear();
-            shoppingCartRepository.save(cart);
-        }
+
+        cart.getBouquets().clear();
+        shoppingCartRepository.save(cart);
+
     }
 }

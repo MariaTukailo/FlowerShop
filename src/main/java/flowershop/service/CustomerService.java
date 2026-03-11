@@ -107,11 +107,6 @@ public class CustomerService {
     public void delete(Long id) {
         Customer customer = findEntityById(id);
 
-        if (customer == null) {
-
-            return;
-        }
-
         hashMap.clear();
         customerRepository.delete(customer);
 

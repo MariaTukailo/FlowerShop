@@ -103,9 +103,6 @@ public class OrderService {
     public OrderDto updateStatus(Long id, String statusValue) {
         Order order = findEntityById(id);
 
-        if (order == null) {
-            return null;
-        }
 
         OrderStatus newStatus = OrderStatus.fromString(statusValue);
         if (newStatus != null) {
