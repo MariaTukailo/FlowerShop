@@ -203,5 +203,6 @@ class OrderServiceTest {
         when(orderRepository.findById(1L)).thenReturn(Optional.empty());
 
         assertThrows(ResponseStatusException.class, () -> orderService.updateStatus(1L, "COMPLETED"));
+
     }
 }
