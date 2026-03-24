@@ -119,7 +119,7 @@ class FlowerServiceTest {
 
     @Test
     void update_PriceChanged_UpdatesBouquets() {
-        flowerDto.setPrice(15.0); // Новая цена
+        flowerDto.setPrice(15.0);
 
         Bouquet bouquet = new Bouquet();
         bouquet.setPrice(100.0);
@@ -132,7 +132,7 @@ class FlowerServiceTest {
         FlowerDto result = flowerService.update(1L, flowerDto);
 
         assertEquals(15.0, result.getPrice());
-        assertEquals(105.0, bouquet.getPrice()); // 100 - 10 + 15
+        assertEquals(105.0, bouquet.getPrice());
         verify(hashMap).clear();
     }
 

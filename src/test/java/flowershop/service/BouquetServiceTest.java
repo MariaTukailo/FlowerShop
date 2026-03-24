@@ -106,18 +106,18 @@ class BouquetServiceTest {
 
         BouquetDto result = bouquetService.create(dto);
 
-        assertEquals(50.0, result.getPrice()); // Только активный цветок (50.0)
+        assertEquals(50.0, result.getPrice());
         verify(bouquetRepository).save(any());
     }
 
     @Test
     void updateStatus_SetActive_Failure_DueToInactiveFlowers() {
-        flower.setActive(false); // В букете неактивный цветок
+        flower.setActive(false);
         when(bouquetRepository.findById(1L)).thenReturn(Optional.of(bouquet));
 
         bouquetService.updateStatus(1L, true);
 
-        assertTrue(bouquet.isActive()); // Статус не изменился бы, если бы был false
+        assertTrue(bouquet.isActive());
         verify(bouquetRepository, never()).save(any());
     }
 
