@@ -17,8 +17,8 @@
         <java.version>17</java.version>
         <sonar.coverage.jacoco.xmlReportPaths>target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
 
-        <sonar.exclusions>**/dto/**, **/entity/**, **/enums/**, **/exception/**, **/controller/**, **/repository/**, **/aspect/**, **/mapper/**, **/FlowerShopApplication.java</sonar.exclusions>
-        <sonar.coverage.exclusions>**/dto/**, **/entity/**, **/enums/**, **/exception/**, **/controller/**, **/repository/**, **/aspect/**, **/mapper/**, **/FlowerShopApplication.java</sonar.coverage.exclusions>
+        <sonar.exclusions>**/dto/**, **/entity/**, **/enums/**, **/exception/**, **/controller/**, **/repository/**, **/aspect/**, **/mapper/**, **/components/**, **/FlowerShopApplication.java</sonar.exclusions>
+        <sonar.coverage.exclusions>**/dto/**, **/entity/**, **/enums/**, **/exception/**, **/controller/**, **/repository/**, **/aspect/**, **/mapper/**, **/components/**, **/FlowerShopApplication.java</sonar.coverage.exclusions>
     </properties>
 
     <dependencies>
@@ -104,7 +104,7 @@
                                 <exclude>**/repository/**</exclude>
                                 <exclude>**/aspect/**</exclude>
                                 <exclude>**/mapper/**</exclude>
-                                <exclude>**/flowershop/FlowershopApplication.class</exclude>
+                                <exclude>**/components/**</exclude> <exclude>**/flowershop/FlowershopApplication.class</exclude>
                             </excludes>
                         </configuration>
                     </execution>
