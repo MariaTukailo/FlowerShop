@@ -61,7 +61,7 @@ public class FlowerController {
         return flowerService.saveAllNotTransactional(flowers);
     }
 
-    @Operation(summary = "Создать цветы (bulk без Transactional)", description = "Создает цветы (bulk)")
+    @Operation(summary = "Создать цветы (bulk  Transactional)", description = "Создает цветы (bulk)")
     @PostMapping("/bulkTransactional")
     public List<FlowerDto> addBulkTransactional(@Valid @RequestBody List<FlowerDto> flowers) {
         return flowerService.saveAllTransactional(flowers);
