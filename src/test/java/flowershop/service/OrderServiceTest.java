@@ -12,7 +12,6 @@ import flowershop.repository.OrderRepository;
 import flowershop.repository.ShoppingCartRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -37,14 +36,10 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class OrderServiceTest {
 
-    @Mock
-    private OrderRepository orderRepository;
-    @Mock
-    private CustomerRepository customerRepository;
-    @Mock
-    private ShoppingCartRepository shoppingCartRepository;
-    @Mock
-    private CustomerHashMap hashMap;
+    @Mock private OrderRepository orderRepository;
+    @Mock private CustomerRepository customerRepository;
+    @Mock private ShoppingCartRepository shoppingCartRepository;
+    @Mock private CustomerHashMap hashMap;
 
     @InjectMocks
     private OrderService orderService;
@@ -53,6 +48,8 @@ class OrderServiceTest {
     private ShoppingCart cart;
     private Bouquet bouquet;
     private final String testAddress = "ул. Цветочная, 15";
+    private final LocalDate testDate = LocalDate.now();
+    private final LocalTime testTime = LocalTime.now();
 
     @BeforeEach
     void setUp() {
@@ -70,165 +67,112 @@ class OrderServiceTest {
         customer.setCart(cart);
     }
 
-    @Test
-    @DisplayName("Поиск всех заказов")
-    void findAll_Success() {
-        when(orderRepository.findAll()).thenReturn(List.of(new Order()));
-        List<OrderDto> result = orderService.findAll();
-        assertFalse(result.isEmpty());
+    private void mockCustomerFound() {
+        when(customerRepository.findById(1L)).thenReturn(Optional.of(customer));
     }
 
     @Test
-    @DisplayName("Поиск заказа по ID")
+    void findAll_Success() {
+        when(orderRepository.findAll()).thenReturn(List.of(new Order()));
+        assertFalse(orderService.findAll().isEmpty());
+    }
+
+    @Test
     void findById_Success() {
         Order order = new Order();
         order.setId(1L);
         when(orderRepository.findById(1L)).thenReturn(Optional.of(order));
-        OrderDto result = orderService.findById(1L);
-        assertNotNull(result);
+        assertNotNull(orderService.findById(1L));
     }
 
     @Test
-    @DisplayName("Заказ не найден по ID")
     void findById_NotFound() {
         when(orderRepository.findById(1L)).thenReturn(Optional.empty());
         assertThrows(ResponseStatusException.class, () -> orderService.findById(1L));
     }
 
     @Test
-    @DisplayName("Успешное создание заказа из корзины")
     void createFromCart_Success() {
-        LocalDate date = LocalDate.now();
-        LocalTime time = LocalTime.now();
-
-        when(customerRepository.findById(1L)).thenReturn(Optional.of(customer));
+        mockCustomerFound();
         when(orderRepository.save(any(Order.class))).thenAnswer(i -> i.getArguments()[0]);
 
-        OrderDto result = orderService.createFromCart(1L, date, time, testAddress);
+        OrderDto result = orderService.createFromCart(1L, testDate, testTime, testAddress);
 
         assertNotNull(result);
         verify(shoppingCartRepository).save(any());
-        verify(orderRepository).save(argThat(order -> order.getAddress().equals(testAddress)));
+        verify(orderRepository).save(argThat(order -> testAddress.equals(order.getAddress())));
         verify(hashMap).clear();
     }
 
     @Test
-    @DisplayName("Ошибка при пустой дате или времени")
     void createFromCart_NullDateTime() {
-        LocalDate date = LocalDate.now();
-        LocalTime time = LocalTime.now();
-
         assertThrows(IllegalArgumentException.class, () ->
-                orderService.createFromCart(1L, null, time, testAddress)
-        );
-
+                orderService.createFromCart(1L, null, testTime, testAddress));
         assertThrows(IllegalArgumentException.class, () ->
-                orderService.createFromCart(1L, date, null, testAddress)
-        );
+                orderService.createFromCart(1L, testDate, null, testAddress));
     }
 
     @Test
-    @DisplayName("Покупатель не найден")
     void createFromCart_CustomerNotFound() {
         when(customerRepository.findById(1L)).thenReturn(Optional.empty());
-
         assertThrows(EntityNotFoundException.class, () ->
-                orderService.createFromCart(1L, LocalDate.now(), LocalTime.now(), testAddress)
-        );
+                orderService.createFromCart(1L, testDate, testTime, testAddress));
     }
 
     @Test
-    @DisplayName("Корзина пуста")
-    void createFromCart_EmptyCart() {
+    void createFromCart_CartValidations() {
+        mockCustomerFound();
+
         cart.getBouquets().clear();
-        when(customerRepository.findById(1L)).thenReturn(Optional.of(customer));
-
         assertThrows(IllegalStateException.class, () ->
-                orderService.createFromCart(1L, LocalDate.now(), LocalTime.now(), testAddress)
-        );
-    }
+                orderService.createFromCart(1L, testDate, testTime, testAddress));
 
-    @Test
-    @DisplayName("В корзине есть неактивные букеты")
-    void createFromCart_InactiveBouquets() {
+        cart.getBouquets().add(bouquet);
         bouquet.setActive(false);
-        when(customerRepository.findById(1L)).thenReturn(Optional.of(customer));
-
         assertThrows(IllegalStateException.class, () ->
-                orderService.createFromCart(1L, LocalDate.now(), LocalTime.now(), testAddress)
-        );
+                orderService.createFromCart(1L, testDate, testTime, testAddress));
+
+        cart.setBouquets(null);
+        assertThrows(IllegalStateException.class, () ->
+                orderService.createFromCart(1L, testDate, testTime, testAddress));
     }
 
     @Test
-    @DisplayName("Успешное обновление статуса")
     void updateStatus_Success() {
         Order order = new Order();
-        order.setId(1L);
         order.setStatus(OrderStatus.PROCESSING);
-
         when(orderRepository.findById(1L)).thenReturn(Optional.of(order));
         when(orderRepository.save(any(Order.class))).thenAnswer(i -> i.getArguments()[0]);
 
-        OrderDto result = orderService.updateStatus(1L, "DELIVERED");
+        orderService.updateStatus(1L, "DELIVERED");
 
-        assertNotNull(result);
         verify(orderRepository).save(argThat(o -> o.getStatus() == OrderStatus.DELIVERED));
         verify(hashMap).clear();
     }
 
     @Test
-    @DisplayName("Некорректный статус")
     void updateStatus_InvalidStatus() {
-        Order order = new Order();
-        when(orderRepository.findById(1L)).thenReturn(Optional.of(order));
-        assertThrows(IllegalArgumentException.class, () -> orderService.updateStatus(1L, "INVALID_STATUS_NAME"));
+        when(orderRepository.findById(1L)).thenReturn(Optional.of(new Order()));
+        assertThrows(IllegalArgumentException.class, () -> orderService.updateStatus(1L, "INVALID"));
     }
 
     @Test
-    @DisplayName("Расчет итоговой цены при нескольких букетах")
-    void createFromCart_PriceCalculationWithMultipleBouquets() {
-        Bouquet bouquet2 = new Bouquet();
-        bouquet2.setPrice(150.0);
-        bouquet2.setActive(true);
-        cart.getBouquets().add(bouquet2);
-
-        when(customerRepository.findById(1L)).thenReturn(Optional.of(customer));
+    void complexBusinessLogicTest() {
+        mockCustomerFound();
+        Bouquet b2 = new Bouquet(); b2.setPrice(150.0); b2.setActive(true);
+        cart.getBouquets().add(b2);
         when(orderRepository.save(any(Order.class))).thenAnswer(i -> i.getArguments()[0]);
 
-        orderService.createFromCart(1L, LocalDate.now(), LocalTime.now(), testAddress);
+        orderService.createFromCart(1L, testDate, testTime, testAddress);
+        verify(orderRepository).save(argThat(o -> o.getFinalPrice() == 250.0));
 
-        verify(orderRepository).save(argThat(savedOrder -> savedOrder.getFinalPrice() == 250.0));
-    }
-
-    @Test
-    @DisplayName("Ошибка если список букетов в корзине null")
-    void createFromCart_CartWithNullBouquetsList() {
-        cart.setBouquets(null);
-        when(customerRepository.findById(1L)).thenReturn(Optional.of(customer));
-
-        assertThrows(IllegalStateException.class, () ->
-                orderService.createFromCart(1L, LocalDate.now(), LocalTime.now(), testAddress)
-        );
-    }
-
-    @Test
-    @DisplayName("Обновление статуса (регистронезависимо)")
-    void updateStatus_StatusCaseInsensitive() {
         Order order = new Order();
-        order.setId(1L);
-        order.setStatus(OrderStatus.PROCESSING);
-
-        when(orderRepository.findById(1L)).thenReturn(Optional.of(order));
-        when(orderRepository.save(any(Order.class))).thenAnswer(i -> i.getArguments()[0]);
-
-
-        orderService.updateStatus(1L, "cancelled");
-
+        when(orderRepository.findById(2L)).thenReturn(Optional.of(order));
+        orderService.updateStatus(2L, "cancelled");
         verify(orderRepository).save(argThat(o -> o.getStatus() == OrderStatus.CANCELLED));
     }
 
     @Test
-    @DisplayName("Заказ не найден при обновлении статуса")
     void updateStatus_NotFound() {
         when(orderRepository.findById(1L)).thenReturn(Optional.empty());
         assertThrows(ResponseStatusException.class, () -> orderService.updateStatus(1L, "COMPLETED"));
