@@ -37,7 +37,7 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    private String address;
     private LocalDateTime date;
     private double finalPrice;
     private LocalDate deliveryDate;

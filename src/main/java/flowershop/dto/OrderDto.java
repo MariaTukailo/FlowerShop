@@ -40,6 +40,9 @@ public class OrderDto {
     @Schema(description = "Цена заказа в рублях", example = "55")
     private double finalPrice;
 
+    @Schema(description = "Адрес доставки", example = "ул. Космонавтов 56, кв 45")
+    private String address;
+
     @Schema(description = "Статус заказа", example = "принят")
     private String status;
 

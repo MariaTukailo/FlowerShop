@@ -53,10 +53,12 @@ public class OrderController {
 
             @RequestParam
             @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
-            LocalTime deliveryTime) {
+            LocalTime deliveryTime,
+
+            @RequestParam String address) {
 
 
-        return orderService.createFromCart(customerId, deliveryDate, deliveryTime);
+        return orderService.createFromCart(customerId, deliveryDate, deliveryTime,address);
     }
 
     @Operation(summary = "Изменить статус заказа ", description = "Изменяет статус заказа ( в обработке, принят, в пути, доставлен, отменен ")

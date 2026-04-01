@@ -46,7 +46,7 @@ public class AsyncFlowerService {
 
             flowerRepository.saveAll(flowers);
             taskStatusMap.put(taskId, TaskStatus.SAVED);
-            Thread.sleep(10000);
+            Thread.sleep(30000);
             taskStatusMap.put(taskId, TaskStatus.COMPLETED);
 
         } catch (InterruptedException exception) {

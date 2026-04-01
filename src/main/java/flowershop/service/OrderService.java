@@ -58,7 +58,7 @@ public class OrderService {
 
 
     @Transactional
-    public OrderDto createFromCart(Long customerId, LocalDate deliveryDate, LocalTime deliveryTime) {
+    public OrderDto createFromCart(Long customerId, LocalDate deliveryDate, LocalTime deliveryTime, String address) {
 
         log.info("Начало сохранения заказа пользователя под id {}", customerId);
 
@@ -93,6 +93,7 @@ public class OrderService {
         order.setStatus(OrderStatus.PROCESSING);
         order.setDeliveryDate(deliveryDate);
         order.setDeliveryTime(deliveryTime);
+        order.setAddress(address);
 
         order.setBouquets(new ArrayList<>(bouquetsInCart));
 
@@ -119,8 +120,10 @@ public class OrderService {
         log.debug("Поиск заказа по ID: {}", id);
         Order order = findEntityById(id);
 
-        Optional.ofNullable(OrderStatus.fromString(statusValue))
+        OrderStatus newStatus = Optional.ofNullable(OrderStatus.fromString(statusValue))
                 .orElseThrow(() -> new IllegalArgumentException("Некорректный статус: " + statusValue));
+
+        order.setStatus(newStatus);
 
         hashMap.clear();
         OrderDto updateOrder = OrderMapper.toDto(orderRepository.save(order));

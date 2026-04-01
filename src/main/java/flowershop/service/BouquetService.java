@@ -79,19 +79,18 @@ public class BouquetService {
         List<Flower> activeFlowers = new ArrayList<>();
         double price = 0;
 
-        log.debug("Расчет цены букета");
+
         for (Flower flower : allRequestedFlowers) {
 
             if (flower.isActive()) {
                 activeFlowers.add(flower);
-                price += flower.getPrice();
+
             }
 
         }
 
         Bouquet bouquet = BouquetMapper.toEntity(dto);
         bouquet.setFlowers(activeFlowers);
-        bouquet.setPrice(price);
         bouquet.setActive(true);
 
         log.info("Букет успешно сформирован. Итоговая цена: {}, Количество активных цветов: {}",
