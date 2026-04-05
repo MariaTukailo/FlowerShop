@@ -1,0 +1,63 @@
+/* 1. ГЛОБАЛЬНЫЙ МАКЕТ АДМИНКИ */
+.admin-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Навигация (Цветы, Букеты, Покупатели...) */
+.admin-nav {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 80px; /* Немного ужали для баланса */
+    width: 100%;
+    max-width: 1100px;
+    border-bottom: 1px solid #e2d1c3;
+    padding-bottom: 15px;
+}
+
+.nav-btn {
+    background: none;
+    border: none;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 17px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: #888;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 10px 5px;
+    position: relative;
+}
+
+.nav-btn::after {
+    content: '';
+    position: absolute;
+    bottom: -16px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #000;
+    transition: width 0.3s ease;
+}
+
+.nav-btn:hover::after,
+.nav-btn.active::after {
+    width: 100%;
+}
+
+.nav-btn.active {
+    color: #000;
+    font-weight: 600;
+}
+
+.admin-header h2 {
+    margin-top: 40px;
+    text-align: center;
+    font-family: 'Segoe UI', sans-serif;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 400;
+}

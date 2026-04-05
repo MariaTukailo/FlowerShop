@@ -1,0 +1,202 @@
+/* --- АНИМАЦИИ --- */
+.fade-in {
+    animation: fadeIn 0.6s ease-out forwards;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- ОБЩАЯ СЕТКА ЦВЕТОВ --- */
+.flowers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 40px; /* Увеличил зазор для воздуха */
+    padding: 20px 0;
+    max-width: 1300px;
+    margin: 0 auto;
+}
+
+/* --- КАРТОЧКА ЦВЕТКА --- */
+.flower-card {
+    background: #fff;
+    border: 1px solid #f0ece8;
+    border-radius: 15px;
+    overflow: hidden;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+}
+
+.flower-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(188, 170, 164, 0.2);
+}
+
+.card-image-wrapper {
+    position: relative;
+    height: 320px;
+    width: 100%;
+    background: #fdfaf7;
+}
+
+.card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Бэйджи статуса */
+.card-status-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 10px;
+    text-transform: uppercase;
+    padding: 6px 12px;
+    border-radius: 30px;
+    letter-spacing: 1px;
+    font-weight: 700;
+    backdrop-filter: blur(5px);
+    z-index: 2;
+}
+
+.card-status-badge.active {
+    background: rgba(232, 245, 233, 0.9);
+    color: #2e7d32;
+}
+
+.card-status-badge.hidden {
+    background: rgba(255, 235, 238, 0.9);
+    color: #c62828;
+}
+
+/* Контент карточки */
+.card-content {
+    padding: 25px;
+    text-align: left;
+}
+
+/* Обертка для ID и Цвета в одну строку */
+.card-info-top {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: #9e9e9e;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+.flower-color-tag {
+    color: #8d6e63;
+    font-weight: 600;
+}
+
+.card-title {
+    font-family: 'Georgia', serif;
+    font-size: 22px;
+    margin: 5px 0 15px 0;
+    color: #2c2c2c;
+}
+
+.card-price {
+    font-family: 'Georgia', serif;
+    font-size: 24px;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+/* --- ПАНЕЛЬ ФИЛЬТРАЦИИ ("Полочка") --- */
+.luxury-filter-panel {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    flex-wrap: wrap; /* Чтобы на мобилках не ломалось */
+    gap: 30px;
+
+    padding: 30px;
+    background: #ffffff;
+    border-radius: 20px;
+    border: 1px solid #f4f1ee;
+    max-width: 1100px;
+
+    /* ОТОДВИГАЕМ ОТ ШАПКИ */
+    margin: 80px auto 40px;
+
+    /* МЯГКАЯ ТЕНЬ */
+    box-shadow: 0 10px 30px rgba(226, 209, 195, 0.2);
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.filter-hint {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #bcaaa4;
+    font-weight: 800;
+}
+
+/* Поля ввода в фильтрах */
+.filter-input-short { width: 80px; }
+.filter-input-medium { width: 180px; }
+
+.filter-input-short,
+.filter-input-medium,
+.filter-select-luxury {
+    border: none;
+    border-bottom: 2px solid #f4f1ee;
+    padding: 8px 0;
+    font-family: 'Georgia', serif;
+    font-size: 16px;
+    outline: none;
+    background: transparent;
+    transition: border-color 0.3s;
+    color: #333;
+}
+
+.filter-input-short:focus,
+.filter-input-medium:focus,
+.filter-select-luxury:focus {
+    border-color: #8d6e63;
+}
+
+/* Кнопка переключения статуса */
+.status-toggle-btn {
+    background: none;
+    border: 1px solid #e2d1c3;
+    padding: 10px 20px;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 700;
+    cursor: pointer;
+    border-radius: 30px;
+    transition: 0.3s;
+    color: #8d6e63;
+}
+
+.status-toggle-btn.active {
+    background: #8d6e63;
+    color: #fff;
+    border-color: #8d6e63;
+}
+
+/* Сообщение "не найдено" */
+.no-results-container {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 100px 0;
+}
+
+.no-results-text {
+    font-family: 'Georgia', serif;
+    font-size: 20px;
+    color: #888;
+}

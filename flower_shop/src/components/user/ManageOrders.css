@@ -1,0 +1,219 @@
+/* Анимация плавного появления */
+.fade-in {
+    animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Контейнер фильтров */
+.luxury-filter-panel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 20px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.03);
+    margin-bottom: 30px;
+    border: 1px solid #f4ede4;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.filter-hint {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #bfa37e;
+    font-weight: 700;
+}
+
+.filter-input-medium {
+    border: none;
+    border-bottom: 1px solid #e2d1c3;
+    padding: 8px 0;
+    outline: none;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    background: transparent;
+    transition: 0.3s;
+    min-width: 170px;
+}
+
+.filter-input-medium:focus {
+    border-color: #000;
+}
+
+/* Таблица заказов */
+.table-container-luxury {
+    background: white;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 15px 45px rgba(0,0,0,0.05);
+    border: 1px solid #f0f0f0;
+}
+
+.luxury-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.luxury-table th {
+    background: #fdfaf7;
+    padding: 20px;
+    text-align: left;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #a0a0a0;
+    border-bottom: 2px solid #f4ede4;
+}
+
+.luxury-table td {
+    padding: 20px;
+    border-bottom: 1px solid #f9f9f9;
+    color: #333;
+    font-size: 14px;
+}
+
+.id-cell {
+    font-family: 'Courier New', monospace;
+    color: #bfa37e;
+    font-weight: 800;
+    font-size: 16px;
+}
+
+.name-cell {
+    font-weight: 600;
+}
+
+/* Статусы заказов (Цвета из твоей палитры) */
+.status-badge {
+    padding: 6px 14px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    display: inline-block;
+}
+
+.status-badge.PROCESSING {
+    background-color: #fff4e5;
+    color: #ff9800;
+    border: 1px solid #ffe0b2;
+}
+
+.status-badge.SHIPPING {
+    background-color: #e3f2fd;
+    color: #2196f3;
+    border: 1px solid #bbdefb;
+}
+
+.status-badge.DELIVERED {
+    background-color: #e8f5e9;
+    color: #4caf50;
+    border: 1px solid #c8e6c9;
+}
+
+.status-badge.CANCELLED {
+    background-color: #ffebee;
+    color: #f44336;
+    border: 1px solid #ffcdd2;
+}
+
+.no-orders-message {
+    text-align: center;
+    padding: 60px;
+    background: #fff;
+    border-radius: 20px;
+}
+
+.empty-subtitle {
+    display: block;
+    margin-top: 10px;
+    color: #888;
+}
+/* Поле времени */
+.filter-input-short {
+    border: none;
+    border-bottom: 1px solid #e2d1c3;
+    padding: 8px 0;
+    outline: none;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    background: transparent;
+    transition: 0.3s;
+    width: 100px;
+}
+
+.filter-input-short:focus {
+    border-color: #000;
+}
+
+/* Кнопка сброса фильтров */
+.reset-filter-btn {
+    background: #f4ede4;
+    border: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    color: #bfa37e;
+    cursor: pointer;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    margin-top: 15px; /* чтобы была на уровне инпутов */
+}
+
+.reset-filter-btn:hover {
+    background: #bfa37e;
+    color: white;
+    transform: rotate(90deg);
+}
+
+/* Оптимизация сетки фильтров под 3 элемента */
+.luxury-filter-panel {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end; /* Выравнивание по низу */
+    gap: 30px;
+    padding: 30px;
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.02);
+}
+
+.address-composition-cell {
+    text-align: left;
+    max-width: 300px;
+    padding: 10px !important;
+}
+
+.order-address {
+    font-size: 0.95rem;
+    color: #2c3e50;
+    margin-bottom: 5px;
+}
+
+.order-items-detail {
+    font-size: 0.85rem;
+    color: #7f8c8d;
+    font-style: italic;
+    line-height: 1.2;
+}
+
+.price-cell-bold {
+    font-weight: 700;
+    color: #d4a373; /* Золотистый оттенок под твой стиль */
+    white-space: nowrap;
+}

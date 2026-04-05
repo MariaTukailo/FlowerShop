@@ -1,0 +1,109 @@
+.manage-bouquets-container {
+    padding: 30px;
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    margin: 20px auto;
+    max-width: 1200px;
+}
+
+.manager-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.manager-title {
+    font-family: 'Georgia', serif;
+    font-size: 24px;
+    color: #333;
+}
+
+/* СЕТКА ТАБЛИЦЫ */
+.table-header-luxury, .bouquet-row-luxury {
+    display: grid;
+    /* Явно задаем размеры колонок: фото(80), название(1fr), состав(120), цена(120), кнопка(100) */
+    grid-template-columns: 80px 1fr 120px 120px 100px;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+}
+
+.table-header-luxury {
+    background: #fdfaf7;
+    border-bottom: 2px solid #e2d1c3;
+    font-weight: bold;
+    color: #8d6e63;
+    text-transform: uppercase;
+    font-size: 12px;
+}
+
+.bouquet-row-luxury {
+    border-bottom: 1px solid #eee;
+    transition: background 0.2s;
+}
+
+.bouquet-row-luxury:hover {
+    background: #fdfbf9;
+}
+
+/* ФОТО */
+.row-img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #f0f0f0;
+}
+
+/* ТЕКСТ */
+.col-name strong {
+    display: block;
+    font-size: 16px;
+    color: #2c2c2c;
+}
+.row-id {
+    font-size: 11px;
+    color: #bcaaa4;
+}
+
+/* КНОПКА (ГЛАВНОЕ) */
+.col-actions {
+    display: flex;
+    justify-content: center;
+}
+
+.action-btn-add {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #1a1a1a; /* Черная, чтобы было видно на любом фоне */
+    color: white;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.action-btn-add:hover {
+    background: #8d6e63;
+    transform: scale(1.1);
+}
+
+.action-btn-add:active {
+    transform: scale(0.9);
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}

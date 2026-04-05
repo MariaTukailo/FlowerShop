@@ -1,0 +1,71 @@
+.hero-section {
+    background-color: #f7f3e8;
+    height: 280px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    border-top: 1px solid #e2d1c3;
+    border-bottom: 1px solid #e2d1c3;
+    margin-top: 40px;
+}
+
+.logo-text {
+    font-family: 'Pinyon Script', cursive;
+    font-size: 185px;
+    font-weight: normal;
+    color: #000;
+    z-index: 2;
+    letter-spacing: 16px;
+    padding-right: 80px;
+    margin: 0;
+}
+
+.lili-image {
+    position: absolute;
+    right: 3%;
+    top: 43px;
+    height: 215px;
+    opacity: 0.8;
+    z-index: 1;
+    pointer-events: none;
+    transform: rotate(30deg);
+    transition: transform 0.3s ease;
+}
+
+.dots-image {
+    position: absolute;
+    top: -85px;
+    left: -90px;
+    width: 250px;
+    height: auto;
+    transform: rotate(-35deg) scale(2.5);
+    mix-blend-mode: multiply;
+    z-index: 1;
+    pointer-events: none;
+    transition: transform 0.3s ease-out;
+}
+
+.admin-toggle-btn {
+    position: absolute;
+    top: 7px;         /* Теперь это отступ от самого верха страницы */
+    right: 7px;
+    padding: 8px 15px;
+    background-color: #000;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.3s ease;
+    opacity: 0.8;
+}
+
+.admin-toggle-btn:hover {
+    background-color: #333;
+    transform: translateY(-2px);
+}

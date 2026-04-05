@@ -1,0 +1,130 @@
+/* Отступы для основной части контента под шапкой */
+:root {
+    background-color: #f8f4eb; /* Тот самый нежный бежевый/кремовый */
+}
+
+/* На всякий случай дублируем для body, чтобы не было белых полос при скролле */
+body {
+    margin: 0;
+    background-color: #f8f4eb;
+}
+
+.content-area {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 400px;
+}
+
+/* Настройки для плавного появления контента */
+.main-container {
+    background-color: transparent;
+    width: 100%;
+    min-height: 100vh;
+}
+
+/* Можно добавить общий стиль для заголовков в контенте */
+h2 {
+    font-weight: 300;
+    color: #333;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+/* Общий контейнер формы (теперь без перекрытия всего экрана) */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 50px; /* Отступ от шапки */
+    width: 100%;
+}
+
+/* Элегантная карточка в стиле твоего сайта */
+.login-card {
+    background: white;
+    padding: 40px;
+    border-radius: 15px;
+    /* Мягкая тень, как у карточек с цветами на скрине */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    width: 100%;
+    max-width: 380px;
+    text-align: center;
+    border: 1px solid #eee;
+}
+
+.login-card h2 {
+    font-family: 'Playfair Display', serif; /* Или тот курсив, что в логотипе */
+    color: #4a4a4a;
+    font-size: 24px;
+    margin-bottom: 30px;
+    text-transform: none; /* Убираем капс, чтобы было нежнее */
+}
+
+/* Инпуты как на твоем скрине (тонкие линии) */
+.login-card input {
+    width: 100%;
+    padding: 12px 0;
+    margin-bottom: 20px;
+    border: none;
+    border-bottom: 1px solid #ccc; /* Тонкая линия снизу */
+    background: transparent;
+    outline: none;
+    font-family: inherit;
+    transition: border-color 0.3s;
+}
+
+.login-card input:focus {
+    border-bottom: 1px solid #000; /* При наведении линия темнеет */
+}
+
+/* Кнопка — черная или темно-серая, как кнопка "ПОЛЬЗОВАТЕЛЬ" на скрине */
+.login-card button {
+    background-color: #333;
+    color: #fff;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 14px;
+    width: 100%;
+    margin-top: 10px;
+    transition: opacity 0.3s;
+}
+
+.login-card button:hover {
+    opacity: 0.8;
+}
+
+.toggle-auth {
+    margin-top: 20px;
+    color: #888;
+    cursor: pointer;
+    font-size: 13px;
+    text-decoration: underline;
+}
+
+/* --- Общие стили для ВСЕХ кнопок навигации (UserView и AdminPanel) --- */
+
+
+
+
+/* --- Специфично для кнопки ВЫХОД --- */
+.logout-btn-panel {
+     /* Уводит кнопку в крайний правый угол навигации */
+
+    /* Убираем все старые "черные" стили */
+    background-color: transparent !important;
+    color: #888 !important; /* Начинаем с серого, как все */
+    border: none !important;
+    border-bottom: 2px solid transparent !important;
+    padding: 0 0 8px 0 !important;
+    border-radius: 0 !important;
+    font-weight: normal !important;
+    opacity: 1 !important;
+    letter-spacing: 3px !important;
+}
+

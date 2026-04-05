@@ -1,0 +1,141 @@
+.profile-container-luxury {
+    padding: 60px 20px;
+    background: transparent; /* Убрали лишний белый фон */
+    min-height: 80vh;
+}
+
+/* Вкладки как в админ-панели */
+.operations-grid {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto 50px auto;
+}
+
+.op-card {
+    flex: 1;
+    max-width: 240px;
+    height: 70px;
+    background: rgba(255, 255, 255, 0.4);
+    border: 1px solid #e2d1c3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.4s ease;
+    position: relative;
+}
+
+.op-card.active {
+    border-color: #000;
+    background: #fff;
+}
+
+.op-label {
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #444;
+}
+
+.op-indicator {
+    position: absolute;
+    bottom: 0; left: 50%; transform: translateX(-50%);
+    width: 0; height: 3px; background: #000;
+    transition: width 0.3s ease;
+}
+
+.op-card.active .op-indicator { width: 40%; }
+
+/* Поля ввода */
+.input-field-luxury {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    border-bottom: 1px solid #e2d1c3;
+    padding-bottom: 8px;
+    margin-bottom: 20px;
+}
+
+.input-field-luxury label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #bfa37e;
+    font-weight: 700;
+}
+
+.input-field-luxury input {
+    border: none !important;
+    outline: none !important;
+    background: transparent !important;
+    font-family: 'Georgia', serif;
+    font-size: 20px;
+}
+
+/* КНОПКИ И ИХ РАСПОЛОЖЕНИЕ */
+.profile-action-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 50px;
+    gap: 80px; /* Большой отступ между сохранить и удалить */
+}
+
+.submit-btn-luxury {
+    background: none;
+    border: none;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    cursor: pointer;
+    position: relative;
+    padding: 15px 40px;
+    color: #000;
+}
+
+.btn-line {
+    position: absolute;
+    bottom: 0; left: 50%; transform: translateX(-50%);
+    width: 30%; height: 1px; background: #000;
+    transition: 0.4s;
+}
+
+.submit-btn-luxury:hover .btn-line { width: 100%; }
+
+.delete-btn-luxury {
+    background: none;
+    border: none;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #a0a0a0;
+    cursor: pointer;
+    position: relative;
+    transition: 0.3s;
+}
+
+.delete-btn-luxury:hover { color: #ff4d4d; }
+
+.btn-line-red {
+    position: absolute;
+    bottom: 0; left: 50%; transform: translateX(-50%);
+    width: 0; height: 1px; background: #ff4d4d;
+    transition: 0.3s;
+}
+
+.delete-btn-luxury:hover .btn-line-red { width: 100%; }
+
+/* Сообщение об отсутствии заказов */
+.no-orders-message {
+    text-align: center;
+    padding: 60px;
+    background: rgba(250, 250, 250, 0.5);
+    border: 1px dashed #e2d1c3;
+    font-family: 'Georgia', serif;
+}
+
+.empty-subtitle { font-size: 13px; color: #888; display: block; margin-top: 10px; }

@@ -1,0 +1,132 @@
+.profile-container-luxury {
+    padding: 60px 20px;
+    background: transparent;
+    min-height: 80vh;
+}
+
+/* Навигация (вкладки) */
+.operations-grid {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto 50px auto;
+}
+
+.op-card {
+    flex: 1;
+    max-width: 240px;
+    height: 70px;
+    background: rgba(255, 255, 255, 0.4);
+    border: 1px solid #e2d1c3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.4s ease;
+    position: relative;
+}
+
+.op-card.active {
+    border-color: #000;
+    background: #fff;
+}
+
+.op-label {
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #444;
+}
+
+.op-indicator {
+    position: absolute;
+    bottom: 0; left: 50%; transform: translateX(-50%);
+    width: 0; height: 3px; background: #000;
+    transition: width 0.3s ease;
+}
+
+.op-card.active .op-indicator { width: 40%; }
+
+/* Форма и инпуты */
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+}
+
+.input-field-luxury {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    border-bottom: 1px solid #e2d1c3;
+    padding-bottom: 8px;
+}
+
+.input-field-luxury label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #bfa37e;
+    font-weight: 700;
+}
+
+.input-field-luxury input {
+    border: none !important;
+    outline: none !important;
+    background: transparent !important;
+    font-family: 'Georgia', serif;
+    font-size: 20px;
+    color: #444;
+}
+
+/* КНОПКИ В ОДИН РЯД */
+.profile-action-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-top: 40px; /* Уменьшили отступ, чтобы поднять кнопки выше */
+    gap: 60px;
+}
+
+/* Остальные стили оставляем без изменений для сохранения дизайна */
+.submit-btn-luxury, .delete-btn-luxury {
+    background: none;
+    border: none;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    cursor: pointer;
+    position: relative;
+    padding: 15px 20px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.submit-btn-luxury {
+    font-size: 13px;
+    color: #000;
+}
+
+.delete-btn-luxury {
+    font-size: 11px;
+    color: #a0a0a0;
+    transition: color 0.3s;
+}
+
+.delete-btn-luxury:hover {
+    color: #ff4d4d;
+}
+
+.btn-line, .btn-line-red {
+    position: absolute;
+    bottom: 0; left: 50%; transform: translateX(-50%);
+    height: 1px; transition: 0.4s ease;
+}
+
+.btn-line { width: 40px; background: #000; }
+.btn-line-red { width: 0; background: #ff4d4d; }
+
+.submit-btn-luxury:hover .btn-line { width: 100%; }
+.delete-btn-luxury:hover .btn-line-red { width: 100%; }
