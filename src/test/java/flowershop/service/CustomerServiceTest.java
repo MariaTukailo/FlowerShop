@@ -358,4 +358,152 @@ class CustomerServiceTest {
         assertNotNull(result);
         verify(customerRepository, times(1)).findByFlowerNative(any(), any(), any(), any(Pageable.class));
     }
+
+    @Test
+    void findByFlower_CacheWithDifferentKey_ShouldUseRepository() {
+        Page<Customer> dbPage = new PageImpl<>(List.of(customer));
+
+        when(hashMap.containsKey(any(SearchKey.class))).thenReturn(false);
+        when(customerRepository.findByFlower(any(), any(), any(), any(Pageable.class))).thenReturn(dbPage);
+
+        Page<CustomerDto> result1 = customerService.findByFlower("Роза", testDate, 0, 10);
+        Page<CustomerDto> result2 = customerService.findByFlower("Тюльпан", testDate, 0, 10);
+
+        assertNotNull(result1);
+        assertNotNull(result2);
+        verify(customerRepository, times(2)).findByFlower(any(), any(), any(), any(Pageable.class));
+        verify(hashMap, times(2)).put(any(SearchKey.class), any(Page.class));
+    }
+
+    @Test
+    void findByFlower_CacheHitAfterFirstCall() {
+        Page<Customer> dbPage = new PageImpl<>(List.of(customer));
+        Page<CustomerDto> cachedPage = new PageImpl<>(List.of(customerDto));
+
+        when(hashMap.containsKey(any(SearchKey.class))).thenReturn(false, true);
+        when(customerRepository.findByFlower(any(), any(), any(), any(Pageable.class))).thenReturn(dbPage);
+        when(hashMap.get(any(SearchKey.class))).thenReturn(cachedPage);
+        doNothing().when(hashMap).put(any(SearchKey.class), any(Page.class));
+
+        Page<CustomerDto> result1 = customerService.findByFlower("Роза", testDate, 0, 10);
+        Page<CustomerDto> result2 = customerService.findByFlower("Роза", testDate, 0, 10);
+
+        assertNotNull(result1);
+        assertNotNull(result2);
+        verify(customerRepository, times(1)).findByFlower(any(), any(), any(), any(Pageable.class));
+        verify(hashMap, times(1)).put(any(SearchKey.class), any(Page.class));
+        verify(hashMap, times(2)).containsKey(any(SearchKey.class));
+    }
+
+    @Test
+    void findByFlowerNative_CacheWithDifferentKey_ShouldUseRepository() {
+        Page<Customer> dbPage = new PageImpl<>(List.of(customer));
+
+        when(hashMap.containsKey(any(SearchKey.class))).thenReturn(false);
+        when(customerRepository.findByFlowerNative(any(), any(), any(), any(Pageable.class))).thenReturn(dbPage);
+
+        Page<CustomerDto> result1 = customerService.findByFlowerNative("Лилия", testDate, 0, 10);
+        Page<CustomerDto> result2 = customerService.findByFlowerNative("Орхидея", testDate, 0, 10);
+
+        assertNotNull(result1);
+        assertNotNull(result2);
+        verify(customerRepository, times(2)).findByFlowerNative(any(), any(), any(), any(Pageable.class));
+        verify(hashMap, times(2)).put(any(SearchKey.class), any(Page.class));
+    }
+
+    @Test
+    void findByFlowerNative_CacheHitAfterFirstCall() {
+        Page<Customer> dbPage = new PageImpl<>(List.of(customer));
+        Page<CustomerDto> cachedPage = new PageImpl<>(List.of(customerDto));
+
+        when(hashMap.containsKey(any(SearchKey.class))).thenReturn(false, true);
+        when(customerRepository.findByFlowerNative(any(), any(), any(), any(Pageable.class))).thenReturn(dbPage);
+        when(hashMap.get(any(SearchKey.class))).thenReturn(cachedPage);
+        doNothing().when(hashMap).put(any(SearchKey.class), any(Page.class));
+
+        Page<CustomerDto> result1 = customerService.findByFlowerNative("Лилия", testDate, 0, 10);
+        Page<CustomerDto> result2 = customerService.findByFlowerNative("Лилия", testDate, 0, 10);
+
+        assertNotNull(result1);
+        assertNotNull(result2);
+        verify(customerRepository, times(1)).findByFlowerNative(any(), any(), any(), any(Pageable.class));
+        verify(hashMap, times(1)).put(any(SearchKey.class), any(Page.class));
+        verify(hashMap, times(2)).containsKey(any(SearchKey.class));
+    }
+
+    @Test
+    void findByFlower_CacheWithDifferentDate_ShouldNotUseCache() {
+        Page<Customer> dbPage = new PageImpl<>(List.of(customer));
+        LocalDate date1 = LocalDate.of(2024, 1, 1);
+        LocalDate date2 = LocalDate.of(2024, 1, 2);
+
+        when(hashMap.containsKey(any(SearchKey.class))).thenReturn(false);
+        when(customerRepository.findByFlower(any(), any(), any(), any(Pageable.class))).thenReturn(dbPage);
+
+        Page<CustomerDto> result1 = customerService.findByFlower("Роза", date1, 0, 10);
+        Page<CustomerDto> result2 = customerService.findByFlower("Роза", date2, 0, 10);
+
+        assertNotNull(result1);
+        assertNotNull(result2);
+        verify(customerRepository, times(2)).findByFlower(any(), any(), any(), any(Pageable.class));
+    }
+
+    @Test
+    void findByFlowerNative_CacheWithDifferentPageSize_ShouldNotUseCache() {
+        Page<Customer> dbPage = new PageImpl<>(List.of(customer));
+
+        when(hashMap.containsKey(any(SearchKey.class))).thenReturn(false);
+        when(customerRepository.findByFlowerNative(any(), any(), any(), any(Pageable.class))).thenReturn(dbPage);
+
+        Page<CustomerDto> result1 = customerService.findByFlowerNative("Лилия", testDate, 0, 10);
+        Page<CustomerDto> result2 = customerService.findByFlowerNative("Лилия", testDate, 0, 20);
+
+        assertNotNull(result1);
+        assertNotNull(result2);
+        verify(customerRepository, times(2)).findByFlowerNative(any(), any(), any(), any(Pageable.class));
+    }
+
+    @Test
+    void findByFlower_CacheClearAfterUpdate_ShouldUseRepository() {
+        Page<Customer> dbPage1 = new PageImpl<>(List.of(customer));
+        Page<Customer> dbPage2 = new PageImpl<>(List.of(customer));
+        Page<CustomerDto> cachedPage = new PageImpl<>(List.of(customerDto));
+
+        when(hashMap.containsKey(any(SearchKey.class))).thenReturn(false, true, false);
+        when(customerRepository.findByFlower(any(), any(), any(), any(Pageable.class))).thenReturn(dbPage1, dbPage2);
+        when(hashMap.get(any(SearchKey.class))).thenReturn(cachedPage);
+
+        Page<CustomerDto> result1 = customerService.findByFlower("Роза", testDate, 0, 10);
+
+        customerService.update(1L, customerDto);
+
+        Page<CustomerDto> result2 = customerService.findByFlower("Роза", testDate, 0, 10);
+
+        assertNotNull(result1);
+        assertNotNull(result2);
+        verify(customerRepository, times(2)).findByFlower(any(), any(), any(), any(Pageable.class));
+        verify(hashMap, times(2)).clear();
+    }
+
+    @Test
+    void findByFlowerNative_CacheClearAfterDelete_ShouldUseRepository() {
+        Page<Customer> dbPage = new PageImpl<>(List.of(customer));
+
+        when(hashMap.containsKey(any(SearchKey.class))).thenReturn(false, false);
+        when(customerRepository.findByFlowerNative(any(), any(), any(), any(Pageable.class))).thenReturn(dbPage);
+        when(customerRepository.findById(1L)).thenReturn(Optional.of(customer));
+        doNothing().when(customerRepository).delete(customer);
+
+        Page<CustomerDto> result1 = customerService.findByFlowerNative("Лилия", testDate, 0, 10);
+
+        customerService.delete(1L);
+
+        Page<CustomerDto> result2 = customerService.findByFlowerNative("Лилия", testDate, 0, 10);
+
+        assertNotNull(result1);
+        assertNotNull(result2);
+        verify(customerRepository, times(2)).findByFlowerNative(any(), any(), any(), any(Pageable.class));
+        verify(hashMap, times(2)).clear();
+    }
 }
+
