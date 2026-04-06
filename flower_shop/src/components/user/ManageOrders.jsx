@@ -1,27 +1,39 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../../api';
 import './ManageOrders.css';
 
 const ManageOrders = ({ customerId }) => {
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    // Поля фильтрации
     const [filterDate, setFilterDate] = useState('');
     const [filterTime, setFilterTime] = useState('');
     const [filterStatus, setFilterStatus] = useState('');
+
+    const statusLabels = {
+        "PROCESSING": "Обработка",
+        "SHIPPING": "Принят",
+        "DELIVERED": "Доставлен",
+        "CANCELLED": "Отменен"
+    };
 
     useEffect(() => {
         const fetchOrders = async () => {
             if (!customerId) return;
             try {
                 setLoading(true);
-                const response = await axios.get('http://localhost:8080/orders');
-                // Фильтруем заказы, чтобы пользователь видел только свои
-                const myOrders = response.data.filter(o => o.customerId === customerId);
+                const response = await api.get('/orders');
+
+                const myOrders = response.data
+                    .filter(o => o.customerId?.toString() === customerId.toString())
+                    .map(order => ({
+                        ...order,
+                        status: Object.keys(statusLabels).find(key => statusLabels[key] === order.status) || order.status
+                    }));
+
                 setOrders(myOrders);
             } catch (e) {
-                console.error("Ошибка загрузки истории заказов:", e);
+                console.error("Ошибка загрузки:", e);
             } finally {
                 setLoading(false);
             }
@@ -29,15 +41,12 @@ const ManageOrders = ({ customerId }) => {
         fetchOrders();
     }, [customerId]);
 
-    // Логика фильтрации
     const filteredOrders = orders.filter(order => {
-        const matchesStatus = filterStatus ? order.status === filterStatus : true;
-        const matchesDate = filterDate ? order.deliveryDate === filterDate : true;
-        const matchesTime = filterTime ? order.deliveryTime.startsWith(filterTime) : true;
+        const matchesStatus = !filterStatus || order.status === filterStatus;
+        const matchesDate = !filterDate || order.deliveryDate === filterDate;
+        const matchesTime = !filterTime || (order.deliveryTime && order.deliveryTime.startsWith(filterTime));
         return matchesStatus && matchesDate && matchesTime;
     });
-
-    if (loading) return <div className="loading-luxury">Загрузка истории...</div>;
 
     return (
         <div className="manage-orders-container fade-in">
@@ -46,61 +55,37 @@ const ManageOrders = ({ customerId }) => {
             <div className="luxury-filter-panel">
                 <div className="filter-group">
                     <span className="filter-hint">Дата доставки</span>
-                    <input
-                        type="date"
-                        className="filter-input-medium"
-                        value={filterDate}
-                        onChange={(e) => setFilterDate(e.target.value)}
-                    />
+                    <input type="date" className="filter-input-medium" value={filterDate} onChange={(e) => setFilterDate(e.target.value)} />
                 </div>
-
                 <div className="filter-group">
-                    <span className="filter-hint">Время доставки</span>
-                    <input
-                        type="time"
-                        className="filter-input-short"
-                        value={filterTime}
-                        onChange={(e) => setFilterTime(e.target.value)}
-                    />
+                    <span className="filter-hint">Время</span>
+                    <input type="time" className="filter-input-short" value={filterTime} onChange={(e) => setFilterTime(e.target.value)} />
                 </div>
-
                 <div className="filter-group">
                     <span className="filter-hint">Статус</span>
-                    <select
-                        className="filter-input-medium"
-                        value={filterStatus}
-                        onChange={(e) => setFilterStatus(e.target.value)}
-                    >
+                    <select className="filter-input-medium" value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)}>
                         <option value="">Все статусы</option>
-                        <option value="Обработка">Обработка</option>
-                        <option value="Принят">Принят</option>
-                        <option value="Доставлен">Доставлен</option>
-                        <option value="Отменен">Отменен</option>
+                        {Object.entries(statusLabels).map(([key, label]) => (
+                            <option key={key} value={key}>{label}</option>
+                        ))}
                     </select>
                 </div>
-
                 {(filterDate || filterTime || filterStatus) && (
-                    <button className="reset-filter-btn" onClick={() => {
-                        setFilterDate('');
-                        setFilterTime('');
-                        setFilterStatus('');
-                    }}>✕</button>
+                    <button className="reset-filter-btn" onClick={() => {setFilterDate(''); setFilterTime(''); setFilterStatus('');}}>✕</button>
                 )}
             </div>
 
-            {filteredOrders.length === 0 ? (
-                <div className="no-orders-message">
-                    <p>Заказов не найдено.</p>
-                    <span className="empty-subtitle">Попробуйте изменить параметры фильтрации.</span>
-                </div>
+            {loading ? (
+                <div className="no-orders-message">Загрузка...</div>
+            ) : filteredOrders.length === 0 ? (
+                <div className="no-orders-message">Заказов не найдено</div>
             ) : (
                 <div className="table-container-luxury">
                     <table className="luxury-table">
                         <thead>
                         <tr>
-                            <th>№ Заказа</th>
-                            <th>Дата доставки</th>
-                            <th>Время</th>
+                            <th>№</th>
+                            <th>Дата и время</th>
                             <th>Адрес и состав</th>
                             <th>Сумма</th>
                             <th>Статус</th>
@@ -110,31 +95,20 @@ const ManageOrders = ({ customerId }) => {
                         {filteredOrders.map(order => (
                             <tr key={order.id}>
                                 <td className="id-cell">#{order.id}</td>
-                                <td className="name-cell">{order.deliveryDate}</td>
-                                <td>{order.deliveryTime}</td>
-
-                                {/* Ячейка с Адресом и Букетами */}
+                                <td>
+                                    <div>{order.deliveryDate}</div>
+                                    <div style={{fontSize: '11px', color: '#999'}}>{order.deliveryTime}</div>
+                                </td>
                                 <td className="address-composition-cell">
-                                    <div className="order-address">
-                                        <strong>📍 Адрес:</strong> {order.address || "Не указан"}
-                                    </div>
+                                    <strong>📍 {order.address}</strong>
                                     <div className="order-items-detail">
-                                        <strong>💐 Букеты:</strong> {
-                                        order.bouquets && order.bouquets.length > 0
-                                            ? order.bouquets.map(b => b.name).join(', ')
-                                            : "Нет данных о составе"
-                                    }
+                                        {order.bouquets?.map(b => b.name).join(', ')}
                                     </div>
                                 </td>
-
                                 <td className="price-cell-bold">{order.finalPrice} BYN</td>
                                 <td>
-                                    <span className={`status-badge ${
-                                        order.status === 'Обработка' ? 'PROCESSING' :
-                                            order.status === 'Принят' ? 'SHIPPING' :
-                                                order.status === 'Доставлен' ? 'DELIVERED' : 'CANCELLED'
-                                    }`}>
-                                        {order.status}
+                                    <span className={`status-badge ${order.status}`}>
+                                        {statusLabels[order.status] || order.status}
                                     </span>
                                 </td>
                             </tr>

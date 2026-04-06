@@ -1,29 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../../api';
 import './ManageCustomers.css';
 
 const ManageCustomers = () => {
     const [customers, setCustomers] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    // Состояния для модального окна
     const [selectedCustomer, setSelectedCustomer] = useState(null);
     const [customerOrders, setCustomerOrders] = useState([]);
     const [modalLoading, setModalLoading] = useState(false);
 
-    // Состояния для поиска и фильтрации
     const [flowerName, setFlowerName] = useState('');
     const [searchDate, setSearchDate] = useState(new Date().toISOString().split('T')[0]);
     const [filterId, setFilterId] = useState('');
     const [filterName, setFilterName] = useState('');
 
-    // 1. Загрузка всех данных (и сброс)
     const fetchData = async () => {
         try {
             setLoading(true);
             setFilterId('');
             setFilterName('');
-            const response = await axios.get('http://localhost:8080/customers');
+            const response = await api.get('/customers');
             setCustomers(response.data);
         } catch (e) {
             console.error("Ошибка загрузки:", e);
@@ -32,7 +29,6 @@ const ManageCustomers = () => {
         }
     };
 
-    // 2. Поиск по ID через контроллер (findById)
     const handleIdSearch = async () => {
         if (!filterId) {
             fetchData();
@@ -40,8 +36,15 @@ const ManageCustomers = () => {
         }
         try {
             setLoading(true);
-            const response = await axios.get(`http://localhost:8080/customers/${filterId}`);
-            setCustomers(response.data ? [response.data] : []);
+            const response = await api.get(`/customers/${filterId}`);
+            const data = response.data;
+
+            if (data && (data.id === 1 || data.name.toLowerCase().includes('admin'))) {
+                alert("Доступ к профилю администратора ограничен");
+                setCustomers([]);
+            } else {
+                setCustomers(data ? [data] : []);
+            }
         } catch (e) {
             console.error("Покупатель не найден:", e);
             setCustomers([]);
@@ -51,7 +54,6 @@ const ManageCustomers = () => {
         }
     };
 
-    // 3. Сложный поиск по названию цветка и дате
     const handleAdvancedSearch = async () => {
         if (!flowerName.trim()) {
             alert("Введите название цветка");
@@ -59,7 +61,7 @@ const ManageCustomers = () => {
         }
         try {
             setLoading(true);
-            const response = await axios.get('http://localhost:8080/customers/find-by-flowers', {
+            const response = await api.get('/customers/find-by-flowers', {
                 params: { flowerName, date: searchDate, page: 0, size: 50 }
             });
             setCustomers(response.data.content || []);
@@ -70,12 +72,11 @@ const ManageCustomers = () => {
         }
     };
 
-    // 4. Открытие деталей и загрузка истории заказов
     const handleOpenDetails = async (customer) => {
         setSelectedCustomer(customer);
         setModalLoading(true);
         try {
-            const response = await axios.get(`http://localhost:8080/orders`);
+            const response = await api.get('/orders');
             const clientOrders = response.data.filter(order => order.customerId === customer.id);
             setCustomerOrders(clientOrders);
         } catch (e) {
@@ -89,17 +90,16 @@ const ManageCustomers = () => {
         fetchData();
     }, []);
 
-    // Локальная фильтрация по имени для удобства поиска в текущем списке
-    const filteredCustomers = customers.filter(c =>
-        c.name.toLowerCase().includes(filterName.toLowerCase())
-    );
+    const filteredCustomers = customers.filter(c => {
+        const matchesName = c.name.toLowerCase().includes(filterName.toLowerCase());
+        const isNotAdmin = c.id !== 1 && !c.name.toLowerCase().includes('admin');
+        return matchesName && isNotAdmin;
+    });
 
     return (
         <div className="flowers-admin-panel fade-in">
             <div className="operation-content">
                 <div className="admin-inner-padding">
-
-                    {/* СЛОЖНЫЙ ПОИСК (ПО СОСТАВУ) */}
                     <div className="luxury-filter-panel highlight-bg">
                         <div className="filter-group">
                             <span className="filter-hint">Цветок в букете</span>
@@ -125,7 +125,6 @@ const ManageCustomers = () => {
                         </button>
                     </div>
 
-                    {/* БЫСТРЫЙ ПОИСК (ID И ИМЯ) */}
                     <div className="luxury-filter-panel">
                         <div className="filter-group">
                             <span className="filter-hint">ID (Сервер)</span>
@@ -156,7 +155,6 @@ const ManageCustomers = () => {
                         </button>
                     </div>
 
-                    {/* ТАБЛИЦА РЕЗУЛЬТАТОВ */}
                     <div className="table-container-luxury">
                         {loading ? (
                             <div className="loading-text">Загрузка данных...</div>
@@ -178,9 +176,9 @@ const ManageCustomers = () => {
                                         <td className="name-cell">{customer.name}</td>
                                         <td className="phone-cell">{customer.phoneNumber}</td>
                                         <td>
-                                                <span className="order-count-badge">
-                                                    {customer.orderIds?.length || 0} ШТ.
-                                                </span>
+                                            <span className="order-count-badge">
+                                                {customer.orderIds?.length || 0} ШТ.
+                                            </span>
                                         </td>
                                         <td className="text-right">
                                             <button
@@ -199,7 +197,6 @@ const ManageCustomers = () => {
                 </div>
             </div>
 
-            {/* МОДАЛЬНОЕ ОКНО */}
             {selectedCustomer && (
                 <div className="modal-overlay" onClick={() => setSelectedCustomer(null)}>
                     <div className="modal-content fade-in" onClick={e => e.stopPropagation()}>

@@ -20,7 +20,7 @@ function App() {
                 {!user ? (
                     <Login onLoginSuccess={(userData) => setUser(userData)} />
                 ) : (
-                    // ИСПРАВЛЕНО: передаем user={user} в AdminPanel
+
                     user.role === 'ADMIN'
                         ? <AdminPanel user={user} onLogout={handleLogout} />
                         : <UserView user={user} onLogout={handleLogout} />

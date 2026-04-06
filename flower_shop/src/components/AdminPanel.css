@@ -1,4 +1,4 @@
-/* 1. ГЛОБАЛЬНЫЙ МАКЕТ АДМИНКИ */
+
 .admin-container {
     width: 100%;
     display: flex;
@@ -6,12 +6,12 @@
     align-items: center;
 }
 
-/* Навигация (Цветы, Букеты, Покупатели...) */
+
 .admin-nav {
     margin-top: 20px;
     display: flex;
     justify-content: center;
-    gap: 80px; /* Немного ужали для баланса */
+    gap: 80px;
     width: 100%;
     max-width: 1100px;
     border-bottom: 1px solid #e2d1c3;

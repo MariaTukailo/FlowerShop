@@ -49,7 +49,7 @@
 
 .admin-toggle-btn {
     position: absolute;
-    top: 7px;         /* Теперь это отступ от самого верха страницы */
+    top: 7px;
     right: 7px;
     padding: 8px 15px;
     background-color: #000;

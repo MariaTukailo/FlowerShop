@@ -1,39 +1,132 @@
 .flowers-admin-panel { padding: 10px 20px; width: 100%; }
 
-/* Вкладки (Верхняя навигация) */
-.operations-grid { display: flex; justify-content: center; gap: 25px; width: 100%; max-width: 1300px; margin: 0 auto; }
-.op-card {
-    flex: 1; max-width: 240px; height: 70px; background: #fff; border: 1px solid #e2d1c3;
-    display: flex; align-items: center; justify-content: center; cursor: pointer;
-    transition: all 0.4s ease; position: relative; border-radius: 4px;
+
+.operations-grid { display: flex;
+    justify-content: center;
+    gap: 25px; width: 100%;
+    max-width: 1300px;
+    margin: 0 auto;
 }
-.op-card.active { border-color: #000; background: #fafafa; }
-.op-label { font-family: 'Segoe UI', sans-serif; font-size: 13px; text-transform: uppercase; letter-spacing: 2px; color: #444; }
-.op-indicator { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 0; height: 3px; background: #000; transition: width 0.3s ease; }
+
+.op-card {
+    flex: 1;
+    max-width: 240px;
+    height: 70px;
+    background: #fff;
+    border: 1px solid #e2d1c3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.4s ease;
+    position: relative;
+    border-radius: 4px;
+}
+.op-card.active { border-color: #000;
+    background: #fafafa; }
+.op-label { font-family: 'Segoe UI', sans-serif;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #444; }
+.op-indicator { position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 3px;
+    background: #000;
+    transition: width 0.3s ease; }
 .op-card.active .op-indicator { width: 50%; }
 
-/* Стили форм */
-.form-container-luxury { display: flex; justify-content: center; padding: 40px 20px; }
-.flower-form-clean { width: 100%; max-width: 700px; display: flex; flex-direction: column; gap: 30px; }
-.form-title-luxury { font-family: 'Georgia', serif; font-size: 32px; font-weight: 400; text-align: center; margin-bottom: 20px; }
-.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+
+.form-container-luxury { display: flex;
+    justify-content: center;
+    padding: 40px 20px; }
+
+.flower-form-clean { width: 100%;
+    max-width: 700px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px; }
+
+.form-title-luxury { font-family: 'Georgia', serif;
+    font-size: 32px;
+    font-weight: 400;
+    text-align: center;
+    margin-bottom: 20px; }
+
+.form-grid { display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px; }
+
 .full-width { grid-column: span 2; }
 
-.input-field-luxury { display: flex; flex-direction: column; gap: 10px; border-bottom: 1px solid #e2d1c3; padding-bottom: 5px; }
-.input-field-luxury label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #888; }
+.input-field-luxury { display: flex;
+    flex-direction: column;
+    gap: 10px; border-bottom: 1px solid #e2d1c3;
+    padding-bottom: 5px; }
+
+.input-field-luxury label { font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #888; }
+
 .input-field-luxury input, .input-field-luxury select {
-    border: none !important; outline: none !important; background: transparent !important;
-    font-family: 'Georgia', serif; font-size: 18px; padding: 5px 0;
+    border: none !important;
+    outline: none !important;
+    background: transparent !important;
+    font-family: 'Georgia', serif;
+    font-size: 18px;
+    padding: 5px 0;
 }
 
-/* Кнопки в формах */
-.submit-btn-luxury { background: none; border: none; font-size: 13px; text-transform: uppercase; letter-spacing: 2px; cursor: pointer; position: relative; padding: 20px; margin-top: 20px; }
-.btn-line { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 30%; height: 1px; background: #000; transition: 0.3s; }
+
+.submit-btn-luxury { background: none;
+    border: none;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    cursor: pointer;
+    position: relative;
+    padding: 20px;
+    margin-top: 20px; }
+
+.btn-line { position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 30%; height: 1px;
+    background: #000;
+    transition: 0.3s; }
+
 .submit-btn-luxury:hover .btn-line { width: 100%; }
 
-/* Поиск ID для редактирования */
-.search-form-luxury { width: 100%; max-width: 500px; margin: 0 auto; }
-.search-container-inner { display: flex; flex-direction: column; gap: 15px; }
-.search-field-group { display: flex; border-bottom: 1px solid #000; padding-bottom: 10px; }
-.search-input-clean { flex: 1; border: none; outline: none; font-size: 24px; font-family: 'Georgia'; }
-.search-action-btn { background: none; border: none; text-transform: uppercase; cursor: pointer; letter-spacing: 1px; position: relative; }
+
+.search-form-luxury {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto; }
+
+.search-container-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; }
+
+.search-field-group {
+    display: flex;
+    border-bottom: 1px solid #000;
+    padding-bottom: 10px; }
+
+.search-input-clean { flex: 1;
+    border: none;
+    outline: none;
+    font-size: 24px;
+    font-family: 'Georgia'; }
+
+.search-action-btn { background: none;
+    border: none;
+    text-transform: uppercase;
+    cursor: pointer;
+    letter-spacing: 1px;
+    position: relative; }

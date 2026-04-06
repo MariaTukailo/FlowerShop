@@ -1,19 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
+import api from '../api';
 import './BouquetGallery.css';
 
 const BouquetGallery = ({ isAdmin = false, user }) => {
     const [bouquets, setBouquets] = useState([]);
     const [availableFlowers, setAvailableFlowers] = useState([]);
-    const [openedComposition, setOpenedComposition] = useState(null); // Для раскрытия состава
+    const [openedComposition, setOpenedComposition] = useState(null);
 
     const customerId = user?.customerId || user?.customer?.id || user?.id;
 
     const [searchId, setSearchId] = useState('');
     const [filterName, setFilterName] = useState('');
     const [filterPrice, setFilterPrice] = useState('');
-    const [filterWrapping, setFilterWrapping] = useState('ALL');
-    const [filterRibbon, setFilterRibbon] = useState('ALL');
     const [filterStatus, setFilterStatus] = useState('ALL');
     const [selectedFlowerFilters, setSelectedFlowerFilters] = useState([]);
     const [isFilterFlowersOpen, setIsFilterFlowersOpen] = useState(false);
@@ -29,7 +27,7 @@ const BouquetGallery = ({ isAdmin = false, user }) => {
             return;
         }
         try {
-            await axios.post(`http://localhost:8080/carts/${customerId}/add/${bouquetId}`);
+            await api.post(`/carts/${customerId}/add/${bouquetId}`);
             alert("Букет добавлен в корзину! 🌸");
         } catch (error) {
             console.error("Ошибка при добавлении:", error);
@@ -40,11 +38,13 @@ const BouquetGallery = ({ isAdmin = false, user }) => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const bRes = await axios.get('http://localhost:8080/bouquets');
+                const bRes = await api.get('/bouquets');
                 setBouquets(bRes.data);
-                const fRes = await axios.get('http://localhost:8080/flowers');
+                const fRes = await api.get('/flowers');
                 setAvailableFlowers(fRes.data);
-            } catch (e) { console.error("Ошибка загрузки:", e); }
+            } catch (e) {
+                console.error("Ошибка загрузки:", e);
+            }
         };
         fetchData();
     }, []);
@@ -59,40 +59,84 @@ const BouquetGallery = ({ isAdmin = false, user }) => {
     }, []);
 
     const toggleFlowerFilter = (id) => {
-        setSelectedFlowerFilters(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]);
+        setSelectedFlowerFilters(prev =>
+            prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
+        );
     };
 
     const filteredBouquets = bouquets.filter(b => {
         const matchesId = searchId ? b.id.toString().includes(searchId) : true;
         const matchesName = b.name.toLowerCase().includes(filterName.toLowerCase());
         const matchesPrice = filterPrice ? b.price <= Number(filterPrice) : true;
-        const matchesWrapping = filterWrapping === 'ALL' || (filterWrapping === 'YES' ? b.wrappingPaper : !b.wrappingPaper);
-        const matchesRibbon = filterRibbon === 'ALL' || (filterRibbon === 'YES' ? b.ribbon : !b.ribbon);
-        const matchesStatus = filterStatus === 'ALL' || (filterStatus === 'ACTIVE' ? b.active : !b.active);
+        const matchesStatus = filterStatus === 'ALL' ||
+            (filterStatus === 'ACTIVE' ? b.active : !b.active);
         const matchesFlowers = selectedFlowerFilters.length === 0 ||
             selectedFlowerFilters.every(fId => b.flowers?.some(f => f.id === fId));
+        const visibilityCheck = isAdmin ? true : b.active;
 
-        return matchesId && matchesName && matchesPrice && matchesWrapping && matchesRibbon && matchesStatus && matchesFlowers && (isAdmin ? true : b.active);
+        return matchesId && matchesName && matchesPrice && matchesStatus && matchesFlowers && visibilityCheck;
     });
 
     return (
         <div className="bouquet-gallery-container fade-in">
             <div className="luxury-filter-panel">
-                <div className="filter-group">
-                    <span className="filter-hint">ID</span>
-                    <input type="number" className="filter-input-short" value={searchId} onChange={(e)=>setSearchId(e.target.value)} placeholder="0" />
-                </div>
+
+                {isAdmin && (
+                    <>
+                        <div className="filter-group">
+                            <span className="filter-hint">ID Букета</span>
+                            <input
+                                type="number"
+                                className="filter-input-short"
+                                value={searchId}
+                                onChange={(e) => setSearchId(e.target.value)}
+                                placeholder="0"
+                            />
+                        </div>
+
+                        <div className="filter-group">
+                            <span className="filter-hint">Статус</span>
+                            <select
+                                className="filter-select-luxury"
+                                value={filterStatus}
+                                onChange={(e) => setFilterStatus(e.target.value)}
+                            >
+                                <option value="ALL">Все статусы</option>
+                                <option value="ACTIVE">В продаже</option>
+                                <option value="HIDDEN">В архиве</option>
+                            </select>
+                        </div>
+                    </>
+                )}
+
                 <div className="filter-group">
                     <span className="filter-hint">Название</span>
-                    <input type="text" className="filter-input-medium" value={filterName} onChange={(e)=>setFilterName(e.target.value)} placeholder="Поиск..." />
+                    <input
+                        type="text"
+                        className="filter-input-medium"
+                        value={filterName}
+                        onChange={(e)=>setFilterName(e.target.value)}
+                        placeholder="Поиск..."
+                    />
                 </div>
+
                 <div className="filter-group">
                     <span className="filter-hint">Цена до</span>
-                    <input type="number" className="filter-input-short" value={filterPrice} onChange={(e)=>setFilterPrice(e.target.value)} placeholder="BYN" />
+                    <input
+                        type="number"
+                        className="filter-input-short"
+                        value={filterPrice}
+                        onChange={(e)=>setFilterPrice(e.target.value)}
+                        placeholder="BYN"
+                    />
                 </div>
+
                 <div className="filter-group" ref={filterDropdownRef}>
                     <span className="filter-hint">Состав (фильтр)</span>
-                    <div className="filter-select-luxury custom-select-trigger" onClick={() => setIsFilterFlowersOpen(!isFilterFlowersOpen)}>
+                    <div
+                        className="filter-select-luxury custom-select-trigger"
+                        onClick={() => setIsFilterFlowersOpen(!isFilterFlowersOpen)}
+                    >
                         {selectedFlowerFilters.length > 0 ? `Выбрано: ${selectedFlowerFilters.length}` : 'Все цветы'}
                         <span className="arrow-mini">▼</span>
                     </div>
@@ -100,8 +144,14 @@ const BouquetGallery = ({ isAdmin = false, user }) => {
                         <div className="luxury-dropdown-box fade-in">
                             {availableFlowers.map(f => (
                                 <label key={f.id} className="luxury-checkbox-item">
-                                    <input type="checkbox" checked={selectedFlowerFilters.includes(f.id)} onChange={() => toggleFlowerFilter(f.id)} />
-                                    <span className="flower-name">{f.name}</span>
+                                    <input
+                                        type="checkbox"
+                                        checked={selectedFlowerFilters.includes(f.id)}
+                                        onChange={() => toggleFlowerFilter(f.id)}
+                                    />
+                                    <span className="flower-name">
+                                        {f.name} <small style={{color: '#888'}}>({f.color})</small>
+                                    </span>
                                 </label>
                             ))}
                         </div>
@@ -122,21 +172,22 @@ const BouquetGallery = ({ isAdmin = false, user }) => {
                         </div>
                         <div className="card-content">
                             <div className="card-info-top">
-                                <span>B-ID: {b.id}</span>
+                                <span>{isAdmin ? `B-ID: ${b.id}` : ''}</span>
                                 <button className="composition-toggle-btn" onClick={() => toggleComposition(b.id)}>
                                     {openedComposition === b.id ? 'Скрыть состав' : 'Показать состав'}
                                 </button>
                             </div>
                             <h3 className="card-title">{b.name}</h3>
 
-                            {/* РАСКРЫВАЮЩИЙСЯ СОСТАВ (Many-to-Many) */}
                             {openedComposition === b.id && (
                                 <div className="composition-details fade-in">
                                     <p className="composition-title">В этом букете:</p>
                                     <ul className="composition-list">
                                         {b.flowers && b.flowers.length > 0 ? (
                                             b.flowers.map((f, i) => (
-                                                <li key={i}>• {f.name} <span className="f-color">({f.color})</span></li>
+                                                <li key={i}>
+                                                    • {f.name} <span className="f-color">({f.color})</span>
+                                                </li>
                                             ))
                                         ) : (
                                             <li>Состав уточняется</li>
@@ -153,7 +204,12 @@ const BouquetGallery = ({ isAdmin = false, user }) => {
                             <div className="card-footer-flex">
                                 <p className="card-price">{b.price} BYN</p>
                                 {!isAdmin && (
-                                    <button className="add-to-cart-btn-luxury" onClick={() => handleAddToCart(b.id)}>+</button>
+                                    <button
+                                        className="add-to-cart-btn-luxury"
+                                        onClick={() => handleAddToCart(b.id)}
+                                    >
+                                        +
+                                    </button>
                                 )}
                             </div>
                         </div>

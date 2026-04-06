@@ -15,7 +15,6 @@
     margin-bottom: 30px;
 }
 
-/* Список товаров */
 .cart-items-list {
     margin-bottom: 30px;
 }
@@ -55,7 +54,7 @@
     color: #ff4d4d;
 }
 
-/* Итоги */
+
 .cart-summary {
     background: #fdfaf7;
     padding: 25px;

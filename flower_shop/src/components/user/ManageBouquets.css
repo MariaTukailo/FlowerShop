@@ -20,10 +20,10 @@
     color: #333;
 }
 
-/* СЕТКА ТАБЛИЦЫ */
+
 .table-header-luxury, .bouquet-row-luxury {
     display: grid;
-    /* Явно задаем размеры колонок: фото(80), название(1fr), состав(120), цена(120), кнопка(100) */
+
     grid-template-columns: 80px 1fr 120px 120px 100px;
     align-items: center;
     gap: 15px;
@@ -48,7 +48,7 @@
     background: #fdfbf9;
 }
 
-/* ФОТО */
+
 .row-img {
     width: 50px;
     height: 50px;
@@ -57,7 +57,7 @@
     border: 1px solid #f0f0f0;
 }
 
-/* ТЕКСТ */
+
 .col-name strong {
     display: block;
     font-size: 16px;
@@ -68,7 +68,7 @@
     color: #bcaaa4;
 }
 
-/* КНОПКА (ГЛАВНОЕ) */
+
 .col-actions {
     display: flex;
     justify-content: center;
@@ -78,7 +78,7 @@
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: #1a1a1a; /* Черная, чтобы было видно на любом фоне */
+    background: #1a1a1a;
     color: white;
     border: none;
     font-size: 24px;

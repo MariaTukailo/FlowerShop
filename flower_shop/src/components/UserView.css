@@ -1,12 +1,12 @@
-/* 1. ГЛОБАЛЬНЫЙ ФОН (Цвет из .hero-section) */
+
 html, body {
     margin: 0;
     padding: 0;
-    background-color: #f7f3e8 !important; /* Цвет твоей шапки */
+    background-color: #f7f3e8 !important;
     min-height: 100vh;
 }
 
-/* 2. ГЛОБАЛЬНЫЙ МАКЕТ ПОЛЬЗОВАТЕЛЯ */
+
 .user-container {
     width: 100%;
     display: flex;
@@ -16,7 +16,7 @@ html, body {
     min-height: 100vh;
 }
 
-/* 3. НАВИГАЦИЯ (Стиль админки) */
+
 .user-nav {
     margin-top: 20px;
     display: flex;
@@ -27,7 +27,7 @@ html, body {
     border-bottom: 1px solid #e2d1c3;
     padding-bottom: 15px;
     position: relative;
-    background-color: #f7f3e8 !important; /* Убеждаемся, что здесь цвет шапки */
+    background-color: #f7f3e8 !important;
 }
 
 .nav-btn {
@@ -45,7 +45,7 @@ html, body {
     outline: none;
 }
 
-/* Черная линия под активной кнопкой */
+
 .nav-btn::after {
     content: '';
     position: absolute;
@@ -67,7 +67,7 @@ html, body {
     font-weight: 600 !important;
 }
 
-/* 4. КОРЗИНА И ВЫХОД */
+
 .nav-cart-wrapper {
     position: absolute;
     right: 0;
@@ -81,4 +81,3 @@ html, body {
     color: #333;
 }
 
-/* 5. ПО

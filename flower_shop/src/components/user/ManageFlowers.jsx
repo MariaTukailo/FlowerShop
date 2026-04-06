@@ -11,8 +11,7 @@ const UserFlowers = () => {
             </header>
 
             <main className="user-content">
-                {/* Вызываем общий компонент.
-                    isAdmin={false} скроет техническую информацию */}
+
                 <FlowerGallery isAdmin={false} />
             </main>
         </div>

@@ -1,4 +1,4 @@
-/* --- АНИМАЦИИ --- */
+
 .fade-in {
     animation: fadeIn 0.5s ease-in-out;
 }
@@ -8,7 +8,7 @@
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* --- ПАНЕЛИ ФИЛЬТРОВ --- */
+
 .luxury-filter-panel {
     display: flex;
     align-items: flex-end;
@@ -59,11 +59,11 @@
     gap: 10px;
 }
 
-/* --- КНОПКИ (Строгий черный стиль) --- */
+
 .action-btn-mini {
     border: none;
     padding: 8px 16px;
-    border-radius: 5px; /* Более строгие углы */
+    border-radius: 5px;
     background: #000000 !important;
     color: #ffffff !important;
     font-weight: 700;
@@ -79,15 +79,15 @@
 }
 
 .action-btn-mini:hover {
-    opacity: 0.8; /* Лаконичный эффект при наведении */
+    opacity: 0.8;
 }
 
-/* Прижимаем последнюю кнопку (сброс) к правому краю */
+
 .reset-btn {
     margin-left: auto;
 }
 
-/* --- ТАБЛИЦА --- */
+
 .table-container-luxury {
     background: white;
     border-radius: 20px;
@@ -121,7 +121,7 @@
 .id-cell { font-weight: 700; color: #bfa37e; }
 .name-cell { font-weight: 600; }
 
-/* --- МОДАЛЬНОЕ ОКНО --- */
+
 .modal-overlay {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
@@ -153,7 +153,7 @@
     color: #ccc;
 }
 
-/* СТАТУСЫ */
+
 .order-count-badge {
     background: #f5f0eb;
     padding: 5px 12px;

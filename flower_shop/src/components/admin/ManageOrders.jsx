@@ -1,18 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../../api';
 import './ManageOrders.css';
 
-const ManageOrders = () => {
+const AdminOrders = () => {
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(false);
-
-    const [filterOrderId, setFilterOrderId] = useState('');
-    const [filterCustomerId, setFilterCustomerId] = useState('');
     const [filterStatus, setFilterStatus] = useState('');
-    const [searchDate, setSearchDate] = useState(new Date().toISOString().split('T')[0]);
+    const [searchDate, setSearchDate] = useState('');
 
-    // Карта для перевода: экранное имя -> системное для БД
-    const statusMapping = {
+    const statusLabels = {
         "PROCESSING": "Обработка",
         "SHIPPING": "Принят",
         "DELIVERED": "Доставлен",
@@ -22,122 +18,114 @@ const ManageOrders = () => {
     const fetchData = async () => {
         try {
             setLoading(true);
-            const response = await axios.get('http://localhost:8080/orders');
-            setOrders(response.data);
+            const response = await api.get('/orders');
+
+            const normalizedData = response.data.map(order => ({
+                ...order,
+                status: Object.keys(statusLabels).find(key => statusLabels[key] === order.status) || order.status
+            }));
+            setOrders(normalizedData);
         } catch (e) {
-            console.error("Загрузка не удалась:", e);
+            console.error("Ошибка загрузки:", e);
         } finally {
             setLoading(false);
         }
-    };
-
-    const handleStatusChange = (orderId, newSystemStatus) => {
-        // Просто отправляем запрос без лишних алертов
-        axios.patch(`http://localhost:8080/orders/${orderId}/status`, null, {
-            params: { status: newSystemStatus }
-        });
-
-        // Сразу обновляем интерфейс, чтобы всё было "летучим"
-        const russianName = statusMapping[newSystemStatus];
-        setOrders(prev => prev.map(o => o.id === orderId ? { ...o, status: russianName } : o));
     };
 
     useEffect(() => {
         fetchData();
     }, []);
 
-    // Помощник для CSS классов (используем системные имена для цветов)
-    const getStatusClass = (russianStatus) => {
-        return Object.keys(statusMapping).find(key => statusMapping[key] === russianStatus) || "";
+    const handleStatusChange = async (orderId, newStatus) => {
+        try {
+            await api.patch(`/orders/${orderId}/status`, null, {
+                params: { status: newStatus }
+            });
+
+            setOrders(prev => prev.map(o =>
+                o.id === orderId ? { ...o, status: newStatus } : o
+            ));
+        } catch (e) {
+            console.error(e);
+            alert("Ошибка при сохранении статуса");
+        }
     };
 
     const filteredOrders = orders.filter(o => {
-        const matchesOrder = filterOrderId ? o.id.toString().includes(filterOrderId) : true;
-        const matchesCustomer = filterCustomerId ? o.customerId?.toString().includes(filterCustomerId) : true;
-        const matchesStatus = filterStatus ? o.status === filterStatus : true;
-        return matchesOrder && matchesCustomer && matchesStatus;
+        const matchesStatus = !filterStatus || o.status === filterStatus;
+        const matchesDate = !searchDate || o.deliveryDate === searchDate;
+        return matchesStatus && matchesDate;
     });
 
     return (
         <div className="flowers-admin-panel fade-in">
-            <div className="operation-content">
-                <div style={{ padding: '0 40px' }}>
+            <div className="operation-content" style={{ padding: '20px 40px' }}>
+                <h1 className="main-title">ORDER MANAGEMENT</h1>
 
-                    {/* Фильтры */}
-                    <div className="luxury-filter-panel">
-                        <div className="filter-group">
-                            <span className="filter-hint">Дата доставки</span>
-                            <input type="date" className="filter-input-medium" value={searchDate} onChange={(e) => setSearchDate(e.target.value)} />
-                        </div>
-                        <button className="action-btn-mini" style={{ background: '#bfa37e' }} onClick={fetchData}>
-                            Обновить список
-                        </button>
+                <div className="luxury-filter-panel">
+                    <div className="filter-group">
+                        <label className="filter-hint">DATE</label>
+                        <input type="date" className="filter-input-medium" value={searchDate} onChange={e => setSearchDate(e.target.value)} />
                     </div>
 
-                    <div className="luxury-filter-panel" style={{ display: 'flex', gap: '15px', marginBottom: '20px' }}>
-                        <div className="filter-group">
-                            <span className="filter-hint">Заказ #</span>
-                            <input type="number" className="filter-input-short" value={filterOrderId} onChange={e => setFilterOrderId(e.target.value)} />
-                        </div>
-                        <div className="filter-group">
-                            <span className="filter-hint">Клиент #</span>
-                            <input type="number" className="filter-input-short" value={filterCustomerId} onChange={e => setFilterCustomerId(e.target.value)} />
-                        </div>
-                        <div className="filter-group" style={{ flexGrow: 1 }}>
-                            <span className="filter-hint">Статус</span>
-                            <select className="filter-input-medium" value={filterStatus} onChange={e => setFilterStatus(e.target.value)}>
-                                <option value="">Все статусы</option>
-                                {Object.values(statusMapping).map(val => (
-                                    <option key={val} value={val}>{val}</option>
-                                ))}
-                            </select>
-                        </div>
+                    <div className="filter-group">
+                        <label className="filter-hint">STATUS</label>
+                        <select
+                            className="filter-input-medium"
+                            value={filterStatus}
+                            onChange={e => setFilterStatus(e.target.value)}
+                        >
+                            <option value="">All Statuses</option>
+                            {Object.entries(statusLabels).map(([key, label]) => (
+                                <option key={key} value={key}>{label}</option>
+                            ))}
+                        </select>
                     </div>
 
-                    {/* Таблица */}
-                    <div className="table-container-luxury">
-                        <table className="luxury-table">
-                            <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Время</th>
-                                <th>Клиент</th>
-                                <th>Адрес</th>
-                                <th>Сумма</th>
-                                <th>Статус</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {filteredOrders.map(order => (
+                    <button className="reset-btn-circle" onClick={() => {setSearchDate(''); setFilterStatus('');}}>✕</button>
+                </div>
+
+                <div className="table-container-luxury">
+                    <table className="luxury-table">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>DATE</th>
+                            <th>CUSTOMER</th>
+                            <th>TOTAL</th>
+                            <th>STATUS</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {filteredOrders.length > 0 ? (
+                            filteredOrders.map(order => (
                                 <tr key={order.id}>
                                     <td className="id-cell">#{order.id}</td>
-                                    <td>
-                                        <div style={{ fontSize: '14px', fontWeight: 'bold' }}>{order.deliveryTime}</div>
-                                        <div style={{ fontSize: '11px', color: '#999' }}>{order.deliveryDate}</div>
-                                    </td>
-                                    <td className="name-cell">ID Покупателя: {order.customerId}</td>
-                                    <td style={{ maxWidth: '200px', fontSize: '12px' }}>{order.address}</td>
-                                    <td style={{ fontWeight: 'bold', color: '#bfa37e' }}>{order.finalPrice} BYN</td>
+                                    <td>{order.deliveryDate}</td>
+                                    <td>ID: {order.customerId}</td>
+                                    <td className="price-cell"><strong>{order.finalPrice} BYN</strong></td>
                                     <td>
                                         <select
-                                            className={`status-select ${getStatusClass(order.status)}`}
-                                            value={Object.keys(statusMapping).find(key => statusMapping[key] === order.status)}
+                                            className={`status-select ${order.status}`}
+                                            value={order.status}
                                             onChange={(e) => handleStatusChange(order.id, e.target.value)}
                                         >
-                                            {Object.entries(statusMapping).map(([key, value]) => (
-                                                <option key={key} value={key}>{value}</option>
+                                            {Object.entries(statusLabels).map(([key, label]) => (
+                                                <option key={key} value={key}>{label}</option>
                                             ))}
                                         </select>
                                     </td>
                                 </tr>
-                            ))}
-                            </tbody>
-                        </table>
-                    </div>
+                            ))
+                        ) : (
+                            <tr><td colSpan="5" style={{textAlign: 'center', padding: '40px'}}>Заказов не найдено</td></tr>
+                        )}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     );
 };
 
-export default ManageOrders;
+export default AdminOrders;

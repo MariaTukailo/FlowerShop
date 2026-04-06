@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../../api';
 import './ManageCustomers.css';
-// 1. Импортируем твой новый компонент
+
 import ManageOrders from './ManageOrders';
 
 const Profile = ({ user, onLogout }) => {
@@ -23,7 +23,7 @@ const Profile = ({ user, onLogout }) => {
             if (!customerId) return;
             try {
                 setLoading(true);
-                const response = await axios.get(`http://localhost:8080/customers/${customerId}`);
+                const response = await api.get(`/customers/${customerId}`);
                 setUserData(response.data);
             } catch (e) {
                 console.error("Ошибка загрузки профиля:", e);
@@ -37,7 +37,7 @@ const Profile = ({ user, onLogout }) => {
     const handleUpdate = async () => {
         try {
             setLoading(true);
-            await axios.put(`http://localhost:8080/customers/${customerId}`, userData);
+            await api.put(`/customers/${customerId}`, userData);
             alert("Данные успешно обновлены!");
         } catch (e) {
             alert("Не удалось сохранить изменения.");
@@ -54,7 +54,7 @@ const Profile = ({ user, onLogout }) => {
 
         try {
             setLoading(true);
-            await axios.delete(`http://localhost:8080/auth/delete/${userId}`);
+            await api.delete(`/auth/delete/${userId}`);
             setShowDeleteConfirm(false);
             if (onLogout) onLogout();
         } catch (e) {
@@ -116,7 +116,6 @@ const Profile = ({ user, onLogout }) => {
                     </div>
                 )}
 
-                {/* 2. Заменяем старую разметку на твой новый компонент */}
                 {activeTab === 'orders' && (
                     <ManageOrders customerId={customerId} />
                 )}

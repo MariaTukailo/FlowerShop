@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../../api';
 import './ManageShoppingCards.css';
 
 const Cart = ({ customerId }) => {
     const [cart, setCart] = useState(null);
     const [loading, setLoading] = useState(false);
 
-    // Состояния для формы заказа
     const [isCheckout, setIsCheckout] = useState(false);
     const [address, setAddress] = useState('');
     const [deliveryDate, setDeliveryDate] = useState('');
@@ -16,7 +15,7 @@ const Cart = ({ customerId }) => {
         if (!customerId) return;
         try {
             setLoading(true);
-            const response = await axios.get(`http://localhost:8080/carts/${customerId}`);
+            const response = await api.get(`/carts/${customerId}`);
             setCart(response.data);
         } catch (e) {
             console.error("Ошибка при загрузке корзины:", e);
@@ -29,12 +28,10 @@ const Cart = ({ customerId }) => {
         fetchCart();
     }, [customerId]);
 
-    // Функция оформления заказа (вызываем твой OrderController)
     const handleOrderSubmit = async (e) => {
         e.preventDefault();
         try {
-            // В контроллере используются @RequestParam, поэтому передаем в params
-            await axios.post(`http://localhost:8080/orders/checkout/${customerId}`, null, {
+            await api.post(`/orders/checkout/${customerId}`, null, {
                 params: {
                     deliveryDate: deliveryDate,
                     deliveryTime: deliveryTime,
@@ -43,7 +40,7 @@ const Cart = ({ customerId }) => {
             });
             alert("Заказ успешно оформлен!");
             setIsCheckout(false);
-            fetchCart(); // Корзина должна очиститься на бэкенде после заказа
+            fetchCart();
         } catch (e) {
             alert("Ошибка при оформлении: " + (e.response?.data?.message || e.message));
         }
@@ -51,7 +48,7 @@ const Cart = ({ customerId }) => {
 
     const handleRemove = async (bouquetId) => {
         try {
-            await axios.delete(`http://localhost:8080/carts/${customerId}/remove/${bouquetId}`);
+            await api.delete(`/carts/${customerId}/remove/${bouquetId}`);
             fetchCart();
         } catch (e) {
             alert("Не удалось удалить букет");
@@ -60,7 +57,7 @@ const Cart = ({ customerId }) => {
 
     const handleClear = async () => {
         try {
-            await axios.delete(`http://localhost:8080/carts/${customerId}/clear`);
+            await api.delete(`/carts/${customerId}/clear`);
             setCart({ ...cart, bouquets: [] });
         } catch (e) {
             alert("Не удалось очистить корзину");
@@ -69,7 +66,6 @@ const Cart = ({ customerId }) => {
 
     if (loading) return <div className="cart-loading">Загрузка вашей корзины...</div>;
 
-    // ЕСЛИ ПОЛЬЗОВАТЕЛЬ НАЖАЛ "ОФОРМИТЬ", ПОКАЗЫВАЕМ ФОРМУ
     if (isCheckout) {
         return (
             <div className="cart-container fade-in">
@@ -114,7 +110,6 @@ const Cart = ({ customerId }) => {
         );
     }
 
-    // ОБЫЧНЫЙ ВИД КОРЗИНЫ
     return (
         <div className="cart-container fade-in">
             <h2 className="cart-title">Ваша корзина</h2>
@@ -144,7 +139,6 @@ const Cart = ({ customerId }) => {
                         </div>
                         <div className="cart-actions">
                             <button className="clear-cart-btn" onClick={handleClear}>Очистить всё</button>
-                            {/* ТЕПЕРЬ КНОПКА ПЕРЕКЛЮЧАЕТ НА ФОРМУ */}
                             <button className="checkout-btn-luxury" onClick={() => setIsCheckout(true)}>Оформить заказ</button>
                         </div>
                     </div>

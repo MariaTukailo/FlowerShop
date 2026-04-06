@@ -16,7 +16,7 @@ function AdminPanel({ onLogout }) {
                 <button className={adminTab === 'customers' ? 'nav-btn active' : 'nav-btn'} onClick={() => setAdminTab('customers')}>Покупатели</button>
                 <button className={adminTab === 'orders' ? 'nav-btn active' : 'nav-btn'} onClick={() => setAdminTab('orders')}>Заказы</button>
 
-                {/* Исправленная кнопка ВЫХОД */}
+
                 <button className="nav-btn logout-btn-panel" onClick={onLogout}>
                     ВЫХОД
                 </button>

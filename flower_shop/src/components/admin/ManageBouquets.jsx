@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
+import api from '../../api';
 import BouquetGallery from '../BouquetGallery';
 import './ManageFlowers.css';
 
@@ -9,7 +9,6 @@ const ManageBouquets = () => {
     const [editingBouquet, setEditingBouquet] = useState(null);
     const [editId, setEditId] = useState('');
 
-    // --- СОСТОЯНИЯ ДЛЯ СОЗДАНИЯ ---
     const [newBouquet, setNewBouquet] = useState({
         name: '', active: true, price: '', wrappingPaper: false,
         ribbon: false, pathPhoto: '', countFlowers: '', flowers: []
@@ -17,18 +16,16 @@ const ManageBouquets = () => {
     const [isCreateFlowersOpen, setIsCreateFlowersOpen] = useState(false);
     const createDropdownRef = useRef(null);
 
-    // Загружаем только список цветов для формы создания
     useEffect(() => {
         const fetchFlowers = async () => {
             try {
-                const fRes = await axios.get('http://localhost:8080/flowers');
+                const fRes = await api.get('/flowers');
                 setAvailableFlowers(fRes.data);
             } catch (e) { console.error("Ошибка загрузки цветов:", e); }
         };
         fetchFlowers();
     }, []);
 
-    // Закрытие выпадающего списка при клике вне его
     useEffect(() => {
         const handleClick = (e) => {
             if (createDropdownRef.current && !createDropdownRef.current.contains(e.target)) {
@@ -53,7 +50,7 @@ const ManageBouquets = () => {
         e.preventDefault();
         if (newBouquet.flowers.length === 0) return alert("Выберите хотя бы один цветок для состава!");
         try {
-            await axios.post('http://localhost:8080/bouquets', {
+            await api.post('/bouquets', {
                 ...newBouquet,
                 price: Number(newBouquet.price),
                 countFlowers: Number(newBouquet.countFlowers)
@@ -67,7 +64,7 @@ const ManageBouquets = () => {
     const findForStatusChange = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.get(`http://localhost:8080/bouquets/${editId}`);
+            const response = await api.get(`/bouquets/${editId}`);
             setEditingBouquet(response.data);
         } catch (error) { alert("Букет с таким ID не найден"); }
     };
@@ -75,7 +72,7 @@ const ManageBouquets = () => {
     const toggleStatus = async () => {
         try {
             const newStatus = !editingBouquet.active;
-            const response = await axios.patch(`http://localhost:8080/bouquets/${editingBouquet.id}/status?active=${newStatus}`);
+            const response = await api.patch(`/bouquets/${editingBouquet.id}/status?active=${newStatus}`);
             setEditingBouquet(response.data);
             alert(newStatus ? "Букет возвращен в продажу" : "Букет отправлен в архив");
         } catch (error) { alert("Не удалось изменить статус"); }
@@ -99,12 +96,10 @@ const ManageBouquets = () => {
             </div>
 
             <div className="operation-content">
-                {/* 1. СПИСОК И ФИЛЬТРЫ (ОБЩИЙ КОМПОНЕНТ) */}
                 {activeOperation === 'findAll' && (
                     <BouquetGallery isAdmin={true} />
                 )}
 
-                {/* 2. ФОРМА СОЗДАНИЯ */}
                 {activeOperation === 'create' && (
                     <div className="form-container-luxury fade-in">
                         <form className="flower-form-clean" onSubmit={handleCreateSubmit}>
@@ -178,7 +173,6 @@ const ManageBouquets = () => {
                     </div>
                 )}
 
-                {/* 3. УПРАВЛЕНИЕ СТАТУСОМ */}
                 {activeOperation === 'update' && (
                     <div className="form-container-luxury fade-in">
                         {!editingBouquet ? (

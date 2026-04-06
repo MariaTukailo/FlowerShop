@@ -4,7 +4,7 @@
     min-height: 80vh;
 }
 
-/* Навигация (вкладки) */
+
 .operations-grid {
     display: flex;
     justify-content: center;
@@ -50,7 +50,7 @@
 
 .op-card.active .op-indicator { width: 40%; }
 
-/* Форма и инпуты */
+
 .form-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -82,17 +82,17 @@
     color: #444;
 }
 
-/* КНОПКИ В ОДИН РЯД */
+
 .profile-action-container {
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    margin-top: 40px; /* Уменьшили отступ, чтобы поднять кнопки выше */
+    margin-top: 40px;
     gap: 60px;
 }
 
-/* Остальные стили оставляем без изменений для сохранения дизайна */
+
 .submit-btn-luxury, .delete-btn-luxury {
     background: none;
     border: none;

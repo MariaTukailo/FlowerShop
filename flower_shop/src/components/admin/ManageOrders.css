@@ -1,4 +1,4 @@
-/* Основной контейнер с анимацией появления */
+
 .fade-in {
     animation: fadeIn 0.5s ease-in-out;
 }
@@ -8,7 +8,7 @@
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* Общие стили для выпадающих списков (статусов) */
+
 .status-select {
     padding: 8px 14px;
     border-radius: 12px;
@@ -22,43 +22,42 @@
     width: 140px;
 }
 
-/* Цветовая индикация статусов на основе системных имен из БД */
 
-/* Статус: Обработка */
+
+
 .status-select.PROCESSING {
     background-color: #fff4e5;
     color: #ff9800;
     border-color: #ffe0b2;
 }
 
-/* Статус: Принят (в базе SHIPPING) */
+
 .status-select.SHIPPING {
     background-color: #e3f2fd;
     color: #2196f3;
     border-color: #bbdefb;
 }
 
-/* Статус: Доставлен */
+
 .status-select.DELIVERED {
     background-color: #e8f5e9;
     color: #4caf50;
     border-color: #c8e6c9;
 }
 
-/* Статус: Отменен */
 .status-select.CANCELLED {
     background-color: #ffebee;
     color: #f44336;
     border-color: #ffcdd2;
 }
 
-/* Ховер эффект для селекта */
+
 .status-select:hover {
     filter: brightness(0.96);
     box-shadow: 0 4px 8px rgba(0,0,0,0.05);
 }
 
-/* Панель фильтров (в стиле Luxury) */
+
 .luxury-filter-panel {
     display: flex;
     align-items: center;
@@ -99,7 +98,7 @@
     border-color: #bfa37e;
 }
 
-/* Оформление таблицы */
+
 .table-container-luxury {
     background: white;
     border-radius: 20px;
@@ -143,7 +142,7 @@
     color: #2c3e50;
 }
 
-/* Мини-кнопка действия (Обновить данные) */
+
 .action-btn-mini {
     border: none;
     padding: 12px 24px;

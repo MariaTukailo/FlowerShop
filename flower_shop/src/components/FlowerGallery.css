@@ -1,4 +1,4 @@
-/* --- АНИМАЦИИ --- */
+
 .fade-in {
     animation: fadeIn 0.6s ease-out forwards;
 }
@@ -8,17 +8,17 @@
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* --- ОБЩАЯ СЕТКА ЦВЕТОВ --- */
+
 .flowers-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 40px; /* Увеличил зазор для воздуха */
+    gap: 40px;
     padding: 20px 0;
     max-width: 1300px;
     margin: 0 auto;
 }
 
-/* --- КАРТОЧКА ЦВЕТКА --- */
+
 .flower-card {
     background: #fff;
     border: 1px solid #f0ece8;
@@ -47,7 +47,7 @@
     object-fit: cover;
 }
 
-/* Бэйджи статуса */
+
 .card-status-badge {
     position: absolute;
     top: 15px;
@@ -72,13 +72,11 @@
     color: #c62828;
 }
 
-/* Контент карточки */
 .card-content {
     padding: 25px;
     text-align: left;
 }
 
-/* Обертка для ID и Цвета в одну строку */
 .card-info-top {
     display: flex;
     justify-content: space-between;
@@ -108,12 +106,12 @@
     color: #1a1a1a;
 }
 
-/* --- ПАНЕЛЬ ФИЛЬТРАЦИИ ("Полочка") --- */
+
 .luxury-filter-panel {
     display: flex;
     justify-content: center;
     align-items: flex-end;
-    flex-wrap: wrap; /* Чтобы на мобилках не ломалось */
+    flex-wrap: wrap;
     gap: 30px;
 
     padding: 30px;
@@ -122,10 +120,10 @@
     border: 1px solid #f4f1ee;
     max-width: 1100px;
 
-    /* ОТОДВИГАЕМ ОТ ШАПКИ */
+
     margin: 80px auto 40px;
 
-    /* МЯГКАЯ ТЕНЬ */
+
     box-shadow: 0 10px 30px rgba(226, 209, 195, 0.2);
 }
 
@@ -143,7 +141,7 @@
     font-weight: 800;
 }
 
-/* Поля ввода в фильтрах */
+
 .filter-input-short { width: 80px; }
 .filter-input-medium { width: 180px; }
 
@@ -167,7 +165,7 @@
     border-color: #8d6e63;
 }
 
-/* Кнопка переключения статуса */
+
 .status-toggle-btn {
     background: none;
     border: 1px solid #e2d1c3;
@@ -188,7 +186,7 @@
     border-color: #8d6e63;
 }
 
-/* Сообщение "не найдено" */
+
 .no-results-container {
     grid-column: 1 / -1;
     text-align: center;

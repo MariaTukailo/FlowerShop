@@ -1,4 +1,4 @@
-/* --- ОСНОВНОЙ КОНТЕЙНЕР --- */
+
 .flowers-admin-panel {
     padding: 20px;
     width: 100%;
@@ -6,7 +6,7 @@
     margin: 0 auto;
 }
 
-/* --- НАВИГАЦИЯ (ВКЛАДКИ) --- */
+
 .operations-grid {
     display: flex;
     justify-content: center;
@@ -57,7 +57,7 @@
     width: 50%;
 }
 
-/* --- ФОРМЫ (СОЗДАНИЕ И РЕДАКТИРОВАНИЕ) --- */
+
 .form-container-luxury {
     display: flex;
     justify-content: center;
@@ -95,7 +95,7 @@
     grid-column: span 2;
 }
 
-/* ПОЛЯ ВВОДА */
+
 .input-field-luxury {
     display: flex;
     flex-direction: column;
@@ -129,7 +129,7 @@
     color: #333;
 }
 
-/* СПЕЦИАЛЬНЫЙ ДРОПДАУН ДЛЯ СОСТАВА ВНУТРИ ФОРМЫ */
+
 .luxury-dropdown-box.create-mode {
     position: relative;
     width: 100%;
@@ -141,7 +141,7 @@
     border-radius: 8px;
 }
 
-/* ЧЕКБОКСЫ (БУМАГА/ЛЕНТА) */
+
 .checkbox-group-row {
     display: flex;
     gap: 25px;
@@ -163,7 +163,7 @@
     accent-color: #000;
 }
 
-/* КНОПКИ ДЕЙСТВИЯ */
+
 .submit-btn-luxury {
     background: none;
     border: none;
@@ -196,7 +196,7 @@
     width: 100%;
 }
 
-/* ПОИСК (ДЛЯ СМЕНЫ СТАТУСА) */
+
 .search-form-luxury {
     width: 100%;
     max-width: 500px;
@@ -242,7 +242,7 @@
     padding: 0 10px;
 }
 
-/* ПАНЕЛЬ СТАТУСА */
+
 .status-panel-luxury strong {
     color: #000;
     letter-spacing: 1px;
@@ -268,7 +268,7 @@
     border-color: #e2d1c3;
 }
 
-/* АНИМАЦИИ */
+
 .fade-in {
     animation: fadeIn 0.6s ease forwards;
 }

@@ -1,17 +1,14 @@
 import React, { useState } from 'react';
-import axios from 'axios';
-import FlowerGallery from '../FlowerGallery'; // Тот самый общий компонент
+import api from '../../api';
+import FlowerGallery from '../FlowerGallery';
 import './ManageFlowers.css';
 
 const ManageFlowers = () => {
-    // Оставляем только те состояния, которые нужны для УПРАВЛЕНИЯ
     const [activeOperation, setActiveOperation] = useState('findAll');
 
-    // Состояние для редактирования
     const [editingFlower, setEditingFlower] = useState(null);
     const [editId, setEditId] = useState('');
 
-    // Состояние для НОВОГО цветка
     const [newFlower, setNewFlower] = useState({
         name: '',
         price: '',
@@ -22,41 +19,38 @@ const ManageFlowers = () => {
 
     const colorOptions = ['белый', 'желтый', 'розовый', 'красный', 'зеленый', 'черный'];
 
-    // Создание нового цветка
     const handleCreateSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('http://localhost:8080/flowers', {
+            await api.post('/flowers', {
                 ...newFlower,
                 price: Number(newFlower.price)
             });
             alert("Цветок успешно добавлен в базу!");
             setNewFlower({ name: '', price: '', active: true, pathPhoto: '', color: 'красный' });
-            setActiveOperation('findAll'); // Возвращаемся к списку после создания
+            setActiveOperation('findAll');
         } catch (error) {
             alert("Ошибка валидации! Проверьте данные.");
         }
     };
 
-    // Поиск цветка для редактирования
     const findForEdit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.get(`http://localhost:8080/flowers/${editId}`);
+            const response = await api.get(`/flowers/${editId}`);
             setEditingFlower(response.data);
         } catch (error) {
             alert("Цветок с таким ID не найден");
         }
     };
 
-    // Сохранение изменений
     const handleUpdate = async (e) => {
         e.preventDefault();
         try {
-            await axios.put(`http://localhost:8080/flowers/${editingFlower.id}`, editingFlower);
+            await api.put(`/flowers/${editingFlower.id}`, editingFlower);
             alert("Данные обновлены");
             setEditingFlower(null);
-            setActiveOperation('findAll'); // Возвращаемся к списку после обновления
+            setActiveOperation('findAll');
         } catch (error) {
             alert("Ошибка при обновлении");
         }
@@ -64,7 +58,6 @@ const ManageFlowers = () => {
 
     return (
         <div className="flowers-admin-panel">
-            {/* Навигация админа */}
             <div className="operations-grid">
                 <button className={`op-card ${activeOperation === 'findAll' ? 'active' : ''}`} onClick={() => setActiveOperation('findAll')}>
                     <span className="op-label">Ассортимент</span>
@@ -81,12 +74,10 @@ const ManageFlowers = () => {
             </div>
 
             <div className="operation-content">
-                {/* 1. ПОКАЗАТЬ ВСЕ И ФИЛЬТРАЦИЯ (ВЫНЕСЕНО В ОБЩИЙ КОМПОНЕНТ) */}
                 {activeOperation === 'findAll' && (
                     <FlowerGallery isAdmin={true} />
                 )}
 
-                {/* 2. СОЗДАНИЕ (ОСТАЛОСЬ ТУТ) */}
                 {activeOperation === 'create' && (
                     <div className="form-container-luxury fade-in">
                         <form className="flower-form-clean" onSubmit={handleCreateSubmit}>
@@ -127,7 +118,6 @@ const ManageFlowers = () => {
                     </div>
                 )}
 
-                {/* 3. РЕДАКТИРОВАНИЕ (ОСТАЛОСЬ ТУТ) */}
                 {activeOperation === 'update' && (
                     <div className="form-container-luxury fade-in">
                         {!editingFlower ? (

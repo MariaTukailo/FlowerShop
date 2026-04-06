@@ -7,7 +7,7 @@ import Cart from './user/ManageShoppingCards.jsx';
 
 function UserView({ user, onLogout }) {
     const [activeTab, setActiveTab] = useState('flowers');
-    // Достаем customerId для корзины
+
     const customerId = user?.customerId || user?.customer?.id;
 
     return (
@@ -55,7 +55,7 @@ function UserView({ user, onLogout }) {
                 {activeTab === 'bouquets' && (
                     <BouquetGallery
                         isAdmin={false}
-                        // ИСПРАВЛЕНО: передаем пропс 'user', так как BouquetGallery ожидает именно это имя
+
                         user={user}
                         onNotifyAuth={() => setActiveTab('customers')}
                     />

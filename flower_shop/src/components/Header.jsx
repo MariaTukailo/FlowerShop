@@ -1,15 +1,14 @@
 import lili from '../assets/lili.png'
 import points from '../assets/points.png'
 import './Header.css'
-// Мы передаем isAdmin и setIsAdmin как "пропсы" (аргументы),
-// чтобы кнопка могла менять состояние, которое лежит в App.jsx
-function Header({ isAdmin, setIsAdmin }) {
+
+function Header({ user }) {
+
+    const isAdmin = user?.role === 'ADMIN';
+
     return (
         <header className="hero-section">
-            <button
-                className="admin-toggle-btn"
-                onClick={() => setIsAdmin(!isAdmin)}
-            >
+            <button className="admin-toggle-btn">
                 {isAdmin ? "Администратор" : "Пользователь"}
             </button>
 

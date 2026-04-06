@@ -1,22 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../../api';
 import './ManageBouquets.css';
 
-// Добавляем 'user' в пропсы на всякий случай
 const ManageBouquets = ({ customerId, user }) => {
     const [bouquets, setBouquets] = useState([]);
     const [loading, setLoading] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
 
-    // УМНАЯ ПРОВЕРКА ID:
-    // Если пришел готовый customerId - берем его.
-    // Если пришел объект user - достаем ID из него.
     const finalCustomerId = customerId || user?.customerId || user?.customer?.id || user?.id;
 
     const fetchBouquets = async () => {
         try {
             setLoading(true);
-            const response = await axios.get('http://localhost:8080/bouquets');
+            const response = await api.get('/bouquets');
             setBouquets(response.data);
             console.log("Загруженные букеты:", response.data);
         } catch (e) {
@@ -28,19 +24,17 @@ const ManageBouquets = ({ customerId, user }) => {
 
     useEffect(() => {
         fetchBouquets();
-        // Лог для проверки в консоли (F12)
         console.log("ManageBouquets получил ID:", finalCustomerId);
     }, [finalCustomerId]);
 
     const handleAddToCart = async (bouquetId) => {
-        // Используем вычисленный ID
         if (!finalCustomerId) {
             alert(`Ошибка: ID не найден. Проверьте пропсы в AdminPanel!`);
             console.error("Данные в компоненте:", { customerId, user });
             return;
         }
         try {
-            await axios.post(`http://localhost:8080/carts/${finalCustomerId}/add/${bouquetId}`);
+            await api.post(`/carts/${finalCustomerId}/add/${bouquetId}`);
             alert("Букет добавлен в корзину! 🌸");
         } catch (error) {
             console.error("Ошибка API:", error);
