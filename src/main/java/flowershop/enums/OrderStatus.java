@@ -1,5 +1,6 @@
 package flowershop.enums;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum OrderStatus {
@@ -19,6 +20,7 @@ public enum OrderStatus {
         return russianName;
     }
 
+    @JsonCreator
     public static OrderStatus fromString(String value) {
 
         if (value == null || value.isBlank()) {
