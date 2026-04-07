@@ -120,3 +120,340 @@ h2 {
     letter-spacing: 3px !important;
 }
 
+.top-service-bar {
+    width: 100%;
+    display: flex;
+    justify-content: space-between; /* Текст слева, кнопка справа */
+    align-items: center;
+    padding: 10px 40px;
+    box-sizing: border-box;
+    background-color: transparent; /* Или #f8f4eb, чтобы сливалось с фоном */
+}
+
+.user-status-text {
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #bfa37e; /* Золотисто-бежевый акцент */
+    font-weight: 600;
+}
+
+.logout-top-btn {
+    background: none;
+    border: none;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #888;
+    cursor: pointer;
+    transition: color 0.3s ease;
+    border-bottom: 1px solid transparent;
+}
+
+.logout-top-btn:hover {
+    color: #000;
+    border-bottom: 1px solid #000;
+}
+
+/* Панель над Header */
+.top-service-bar {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 60px; /* Увеличили отступы */
+    box-sizing: border-box;
+    background-color: #f8f4eb; /* Явно задаем фон фона страницы */
+    z-index: 100; /* Чтобы было поверх всего */
+}
+
+/* Текст статуса слева */
+.user-status-text {
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #bfa37e;
+    font-weight: 700;
+}
+
+/* Кнопка выхода справа */
+.logout-top-btn {
+    background: none;
+    border: none;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #888;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 5px 0;
+    border-bottom: 1px solid transparent;
+}
+
+.logout-top-btn:hover {
+    color: #000;
+    border-bottom: 1px solid #000;
+}
+
+/* Убираем лишний отступ у Header, если он есть */
+.hero-section {
+    margin-top: 0 !important;
+}
+
+/* Текст статуса слева (Администратор / Пользователь) */
+/* Текст статуса (Администратор / Пользователь) в черном цвете */
+.user-status-text {
+    font-family: 'Segoe UI', 'Montserrat', sans-serif;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 4px; /* Увеличили для пущей серьезности */
+    color: #000000;      /* Чистый черный */
+    font-weight: 600;    /* Чуть добавили веса, раз цвет стал строгим */
+    position: relative;
+    padding-left: 1px;
+    opacity: 0.5;        /* Легкая прозрачность, чтобы не "резало" глаз */
+}
+
+/* Точка перед текстом теперь тоже черная */
+
+:root {
+    background-color: #f8f4eb;
+}
+
+
+body {
+    margin: 0;
+    background-color: #f8f4eb;
+}
+
+.content-area {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 400px;
+}
+
+
+.main-container {
+    background-color: transparent;
+    width: 100%;
+    min-height: 100vh;
+}
+
+
+h2 {
+    font-weight: 300;
+    color: #333;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 50px;
+    width: 100%;
+}
+
+
+.login-card {
+    background: white;
+    padding: 40px;
+    border-radius: 15px;
+
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    width: 100%;
+    max-width: 380px;
+    text-align: center;
+    border: 1px solid #eee;
+}
+
+.login-card h2 {
+    font-family: 'Playfair Display', serif;
+    color: #4a4a4a;
+    font-size: 24px;
+    margin-bottom: 30px;
+    text-transform: none;
+}
+
+
+.login-card input {
+    width: 100%;
+    padding: 12px 0;
+    margin-bottom: 20px;
+    border: none;
+    border-bottom: 1px solid #ccc;
+    background: transparent;
+    outline: none;
+    font-family: inherit;
+    transition: border-color 0.3s;
+}
+
+.login-card input:focus {
+    border-bottom: 1px solid #000;
+}
+
+
+.login-card button {
+    background-color: #333;
+    color: #fff;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 14px;
+    width: 100%;
+    margin-top: 10px;
+    transition: opacity 0.3s;
+}
+
+.login-card button:hover {
+    opacity: 0.8;
+}
+
+.toggle-auth {
+    margin-top: 20px;
+    color: #888;
+    cursor: pointer;
+    font-size: 13px;
+    text-decoration: underline;
+}
+
+.logout-btn-panel {
+
+    background-color: transparent !important;
+    color: #888 !important;
+    border: none !important;
+    border-bottom: 2px solid transparent !important;
+    padding: 0 0 8px 0 !important;
+    border-radius: 0 !important;
+    font-weight: normal !important;
+    opacity: 1 !important;
+    letter-spacing: 3px !important;
+}
+
+.top-service-bar {
+    width: 100%;
+    display: flex;
+    justify-content: space-between; /* Текст слева, кнопка справа */
+    align-items: center;
+    padding: 10px 40px;
+    box-sizing: border-box;
+    background-color: transparent; /* Или #f8f4eb, чтобы сливалось с фоном */
+}
+
+.user-status-text {
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #bfa37e; /* Золотисто-бежевый акцент */
+    font-weight: 600;
+}
+
+.logout-top-btn {
+    background: none;
+    border: none;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #888;
+    cursor: pointer;
+    transition: color 0.3s ease;
+    border-bottom: 1px solid transparent;
+}
+
+.logout-top-btn:hover {
+    color: #000;
+    border-bottom: 1px solid #000;
+}
+
+/* Панель над Header */
+.top-service-bar {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 60px; /* Увеличили отступы */
+    box-sizing: border-box;
+    background-color: #f8f4eb; /* Явно задаем фон фона страницы */
+    z-index: 100; /* Чтобы было поверх всего */
+}
+
+/* Текст статуса слева */
+.user-status-text {
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #bfa37e;
+    font-weight: 700;
+}
+
+/* Кнопка выхода справа */
+.logout-top-btn {
+    background: none;
+    border: none;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #888;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 5px 0;
+    border-bottom: 1px solid transparent;
+}
+
+.logout-top-btn:hover {
+    color: #000;
+    border-bottom: 1px solid #000;
+}
+
+/* Убираем лишний отступ у Header, если он есть */
+.hero-section {
+    margin-top: 0 !important;
+}
+
+.user-status-text {
+    font-family: 'Segoe UI', 'Montserrat', sans-serif;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 6px;
+    color: #000000;
+    font-weight: 500;
+    position: relative;
+
+    /* Увеличиваем отступ, чтобы текст отодвинулся от точки */
+    padding-left: 15px;
+
+    opacity: 0.5;
+    transition: opacity 0.3s ease;
+}
+
+.user-status-text::before {
+    content: '';
+    position: absolute;
+
+    /* Ставим точку в самый край (в 0) */
+    left: 0;
+
+    /* Центрируем по вертикали */
+    top: 50%;
+    transform: translateY(-50%);
+
+    width: 4px;
+    height: 4px;
+    background-color: #000000;
+    border-radius: 50%;
+}

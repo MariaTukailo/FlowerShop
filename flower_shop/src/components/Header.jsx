@@ -8,9 +8,7 @@ function Header({ user }) {
 
     return (
         <header className="hero-section">
-            <button className="admin-toggle-btn">
-                {isAdmin ? "Администратор" : "Пользователь"}
-            </button>
+
 
             <img src={points} alt="pattern" className="dots-image" />
             <h1 className="logo-text">Flower Shop</h1>

@@ -1,177 +1,84 @@
-
-.fade-in {
-    animation: fadeIn 0.5s ease-in-out;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-
-.luxury-filter-panel {
-    display: flex;
-    align-items: flex-end;
-    gap: 20px;
-    background: #ffffff;
-    padding: 20px 30px;
-    border-radius: 18px;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.04);
-    margin-bottom: 25px;
-}
-
-.filter-group {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-}
-
-.filter-hint {
+/* --- КНОПКИ В СТИЛЕ LUXURY (Как в букетах/цветах) --- */
+.luxury-action-btn {
+    background: none;
+    border: none;
     font-size: 10px;
     text-transform: uppercase;
-    letter-spacing: 1.2px;
-    color: #bfa37e;
-    font-weight: 700;
-}
-
-.filter-input-medium,
-.filter-input-short {
-    border: none;
-    border-bottom: 1px solid #e5e5e5;
-    padding: 8px 0;
-    outline: none;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 14px;
-    background: transparent;
-    transition: border-color 0.3s;
-}
-
-.filter-input-medium:focus,
-.filter-input-short:focus {
-    border-bottom: 1px solid #bfa37e;
-}
-
-.wide { width: 250px; }
-
-.input-with-button {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-
-.action-btn-mini {
-    border: none;
-    padding: 8px 16px;
-    border-radius: 5px;
-    background: #000000 !important;
-    color: #ffffff !important;
-    font-weight: 700;
-    font-size: 10px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 2px;
+    font-weight: 800;
     cursor: pointer;
-    transition: opacity 0.2s ease;
-    height: 34px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+    position: relative;
+    padding: 10px 15px;
+    color: #8d6e63;
+    transition: color 0.3s ease;
 }
 
-.action-btn-mini:hover {
-    opacity: 0.8;
+/* Линия под кнопкой */
+.luxury-action-btn .btn-line {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 1px;
+    background: #bcaaa4;
+    transition: width 0.4s ease;
 }
 
+.luxury-action-btn:hover .btn-line {
+    width: 100%;
+}
 
+.luxury-action-btn:hover {
+    color: #5d4037;
+}
+
+/* Кнопка сброса в панели фильтров */
 .reset-btn {
     margin-left: auto;
+    align-self: center;
 }
 
-
-.table-container-luxury {
-    background: white;
-    border-radius: 20px;
-    overflow: hidden;
-    box-shadow: 0 12px 40px rgba(0,0,0,0.06);
-    border: 1px solid #f0f0f0;
-}
-
-.luxury-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.luxury-table th {
-    background: #fdfaf7;
-    padding: 18px 20px;
-    text-align: left;
-    font-size: 11px;
+/* --- СТАТУСЫ НА РУССКОМ --- */
+.mini-status-label {
+    font-size: 9px;
+    padding: 6px 12px;
+    border-radius: 2px; /* Более строгие формы */
+    font-weight: 800;
     text-transform: uppercase;
-    color: #a0a0a0;
-    border-bottom: 2px solid #f4ede4;
+    letter-spacing: 1px;
 }
 
-.luxury-table td {
-    padding: 15px 20px;
-    border-bottom: 1px solid #f9f9f9;
-    font-size: 14px;
-}
+.mini-status-label.PROCESSING { background: #fdfaf9; color: #d4a373; border: 1px solid #efe8e0; }
+.mini-status-label.SHIPPING { background: #f4f1ee; color: #8d6e63; border: 1px solid #e2d1c3; }
+.mini-status-label.DELIVERED { background: #f0ece8; color: #5d4037; border: 1px solid #efe8e0; }
+.mini-status-label.CANCELLED { background: #fff; color: #bcaaa4; border: 1px dashed #d7ccc8; }
 
-.text-right { text-align: right; }
-.id-cell { font-weight: 700; color: #bfa37e; }
-.name-cell { font-weight: 600; }
-
-
-.modal-overlay {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.45);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 2000;
-    backdrop-filter: blur(5px);
-}
-
+/* --- МОДАЛЬНОЕ ОКНО (Фикс крестика) --- */
 .modal-content {
-    background: white;
-    padding: 35px;
-    border-radius: 25px;
-    width: 550px;
-    max-height: 85vh;
-    box-shadow: 0 25px 60px rgba(0,0,0,0.2);
+    background: #fff;
+    padding: 50px;
+    border-radius: 0; /* Полностью прямоугольное */
+    width: 90%;
+    max-width: 550px;
     position: relative;
-    display: flex;
-    flex-direction: column;
+    box-shadow: 0 30px 70px rgba(0,0,0,0.1);
 }
 
 .close-btn {
+    position: absolute;
+    top: 20px;
+    right: 25px;
     background: none;
     border: none;
     font-size: 30px;
+    color: #d7ccc8;
     cursor: pointer;
-    color: #ccc;
+    line-height: 1;
+    transition: transform 0.3s ease, color 0.3s ease;
 }
 
-
-.order-count-badge {
-    background: #f5f0eb;
-    padding: 5px 12px;
-    border-radius: 10px;
-    font-size: 10px;
-    font-weight: 800;
-    color: #8d7a61;
+.close-btn:hover {
+    color: #8d6e63;
+    transform: rotate(90deg); /* Легкий эффект при наведении */
 }
-
-.mini-status-label {
-    font-size: 9px;
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-weight: 800;
-    text-transform: uppercase;
-}
-
-.mini-status-label.PROCESSING { background: #fff4e5; color: #ff9800; }
-.mini-status-label.SHIPPING { background: #e3f2fd; color: #2196f3; }
-.mini-status-label.DELIVERED { background: #e8f5e9; color: #4caf50; }
-.mini-status-label.CANCELLED { background: #ffebee; color: #f44336; }

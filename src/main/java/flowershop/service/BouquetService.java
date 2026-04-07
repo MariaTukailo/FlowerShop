@@ -126,7 +126,27 @@ public class BouquetService {
         return bouquetSave;
     }
 
+    @Transactional
+    public BouquetDto updatePartial(Long id, Boolean active, Double price, String pathPhoto) {
+        // 1. Ищем букет в базе
+        Bouquet bouquet = bouquetRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Букет с ID " + id + " не найден"));
 
+        // 2. Обновляем только присланные поля
+        if (active != null) {
+            bouquet.setActive(active);
+        }
+        if (price != null) {
+            bouquet.setPrice(price);
+        }
+        if (pathPhoto != null && !pathPhoto.isBlank()) {
+            bouquet.setPathPhoto(pathPhoto);
+        }
+
+        // 3. Сохраняем изменения и возвращаем обновленный DTO
+        Bouquet savedBouquet = bouquetRepository.save(bouquet);
+        return BouquetMapper.toDto(savedBouquet);
+    }
 
 }
 

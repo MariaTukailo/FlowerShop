@@ -4,6 +4,7 @@ import './ManageOrders.css';
 
 const AdminOrders = () => {
     const [orders, setOrders] = useState([]);
+    const [customers, setCustomers] = useState({}); // Для хранения имен покупателей
     const [loading, setLoading] = useState(false);
     const [filterStatus, setFilterStatus] = useState('');
     const [searchDate, setSearchDate] = useState('');
@@ -18,9 +19,20 @@ const AdminOrders = () => {
     const fetchData = async () => {
         try {
             setLoading(true);
-            const response = await api.get('/orders');
+            // Загружаем заказы и покупателей параллельно
+            const [ordersRes, customersRes] = await Promise.all([
+                api.get('/orders'),
+                api.get('/customers')
+            ]);
 
-            const normalizedData = response.data.map(order => ({
+            // Создаем карту покупателей {id: name}
+            const customerMap = {};
+            customersRes.data.forEach(c => {
+                customerMap[c.id] = c.name;
+            });
+            setCustomers(customerMap);
+
+            const normalizedData = ordersRes.data.map(order => ({
                 ...order,
                 status: Object.keys(statusLabels).find(key => statusLabels[key] === order.status) || order.status
             }));
@@ -60,40 +72,43 @@ const AdminOrders = () => {
     return (
         <div className="flowers-admin-panel fade-in">
             <div className="operation-content" style={{ padding: '20px 40px' }}>
-                <h1 className="main-title">ORDER MANAGEMENT</h1>
+
+                {/* Убрали заголовок ORDER MANAGEMENT */}
 
                 <div className="luxury-filter-panel">
                     <div className="filter-group">
-                        <label className="filter-hint">DATE</label>
+                        <label className="filter-hint">ДАТА ДОСТАВКИ</label>
                         <input type="date" className="filter-input-medium" value={searchDate} onChange={e => setSearchDate(e.target.value)} />
                     </div>
 
                     <div className="filter-group">
-                        <label className="filter-hint">STATUS</label>
+                        <label className="filter-hint">СТАТУС ЗАКАЗА</label>
                         <select
                             className="filter-input-medium"
                             value={filterStatus}
                             onChange={e => setFilterStatus(e.target.value)}
                         >
-                            <option value="">All Statuses</option>
+                            <option value="">Все статусы</option>
                             {Object.entries(statusLabels).map(([key, label]) => (
                                 <option key={key} value={key}>{label}</option>
                             ))}
                         </select>
                     </div>
 
-                    <button className="reset-btn-circle" onClick={() => {setSearchDate(''); setFilterStatus('');}}>✕</button>
+                    <button className="luxury-action-btn reset-btn" onClick={() => {setSearchDate(''); setFilterStatus('');}}>
+                        Сбросить <div className="btn-line"></div>
+                    </button>
                 </div>
 
                 <div className="table-container-luxury">
                     <table className="luxury-table">
                         <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>DATE</th>
-                            <th>CUSTOMER</th>
-                            <th>TOTAL</th>
-                            <th>STATUS</th>
+                            <th>ЗАКАЗ</th>
+                            <th>ДАТА</th>
+                            <th>ПОКУПАТЕЛЬ</th>
+                            <th>СУММА</th>
+                            <th className="text-right">СТАТУС</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -101,12 +116,15 @@ const AdminOrders = () => {
                             filteredOrders.map(order => (
                                 <tr key={order.id}>
                                     <td className="id-cell">#{order.id}</td>
-                                    <td>{order.deliveryDate}</td>
-                                    <td>ID: {order.customerId}</td>
+                                    <td className="date-cell">{order.deliveryDate}</td>
+                                    {/* Вместо ID выводим имя из нашей карты */}
+                                    <td className="name-cell">
+                                        {customers[order.customerId] || `Клиент #${order.customerId}`}
+                                    </td>
                                     <td className="price-cell"><strong>{order.finalPrice} BYN</strong></td>
-                                    <td>
+                                    <td className="text-right">
                                         <select
-                                            className={`status-select ${order.status}`}
+                                            className={`status-select-luxury ${order.status}`}
                                             value={order.status}
                                             onChange={(e) => handleStatusChange(order.id, e.target.value)}
                                         >
@@ -118,7 +136,7 @@ const AdminOrders = () => {
                                 </tr>
                             ))
                         ) : (
-                            <tr><td colSpan="5" style={{textAlign: 'center', padding: '40px'}}>Заказов не найдено</td></tr>
+                            <tr><td colSpan="5" className="no-data-text">Заказов не найдено</td></tr>
                         )}
                         </tbody>
                     </table>

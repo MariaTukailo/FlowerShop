@@ -2,20 +2,37 @@ import React, { useState, useEffect, useRef } from 'react';
 import api from '../api';
 import './BouquetGallery.css';
 
-const BouquetGallery = ({ isAdmin = false, user }) => {
-    const [bouquets, setBouquets] = useState([]);
+const BouquetGallery = ({ isAdmin = false, user, onEdit, bouquets: externalBouquets }) => {
+    // Если пришли внешние букеты (из админки), используем их, иначе пустой массив
+    const [bouquets, setBouquets] = useState(externalBouquets || []);
     const [availableFlowers, setAvailableFlowers] = useState([]);
     const [openedComposition, setOpenedComposition] = useState(null);
 
     const customerId = user?.customerId || user?.customer?.id || user?.id;
 
-    const [searchId, setSearchId] = useState('');
     const [filterName, setFilterName] = useState('');
     const [filterPrice, setFilterPrice] = useState('');
     const [filterStatus, setFilterStatus] = useState('ALL');
     const [selectedFlowerFilters, setSelectedFlowerFilters] = useState([]);
     const [isFilterFlowersOpen, setIsFilterFlowersOpen] = useState(false);
     const filterDropdownRef = useRef(null);
+
+    // СИНХРОНИЗАЦИЯ: Это то, чего не хватало!
+    // Когда в ManageBouquets меняется стейт, этот useEffect обновит галерею мгновенно
+    useEffect(() => {
+        if (externalBouquets) {
+            setBouquets(externalBouquets);
+        }
+    }, [externalBouquets]);
+
+    const getRussianColor = (color) => {
+        if (!color) return '';
+        const translations = {
+            'white': 'белый', 'yellow': 'желтый', 'pink': 'розовый',
+            'red': 'красный', 'green': 'зеленый', 'black': 'черный'
+        };
+        return translations[color.toLowerCase()] || color;
+    };
 
     const toggleComposition = (id) => {
         setOpenedComposition(openedComposition === id ? null : id);
@@ -38,8 +55,11 @@ const BouquetGallery = ({ isAdmin = false, user }) => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const bRes = await api.get('/bouquets');
-                setBouquets(bRes.data);
+                // Загружаем букеты только если они не пришли сверху (не из админки)
+                if (!externalBouquets) {
+                    const bRes = await api.get('/bouquets');
+                    setBouquets(bRes.data);
+                }
                 const fRes = await api.get('/flowers');
                 setAvailableFlowers(fRes.data);
             } catch (e) {
@@ -47,7 +67,7 @@ const BouquetGallery = ({ isAdmin = false, user }) => {
             }
         };
         fetchData();
-    }, []);
+    }, [externalBouquets]); // Добавили зависимость
 
     useEffect(() => {
         const handleClick = (e) => {
@@ -65,7 +85,6 @@ const BouquetGallery = ({ isAdmin = false, user }) => {
     };
 
     const filteredBouquets = bouquets.filter(b => {
-        const matchesId = searchId ? b.id.toString().includes(searchId) : true;
         const matchesName = b.name.toLowerCase().includes(filterName.toLowerCase());
         const matchesPrice = filterPrice ? b.price <= Number(filterPrice) : true;
         const matchesStatus = filterStatus === 'ALL' ||
@@ -74,39 +93,26 @@ const BouquetGallery = ({ isAdmin = false, user }) => {
             selectedFlowerFilters.every(fId => b.flowers?.some(f => f.id === fId));
         const visibilityCheck = isAdmin ? true : b.active;
 
-        return matchesId && matchesName && matchesPrice && matchesStatus && matchesFlowers && visibilityCheck;
+        return matchesName && matchesPrice && matchesStatus && matchesFlowers && visibilityCheck;
     });
 
     return (
         <div className="bouquet-gallery-container fade-in">
+            {/* ... фильтры остаются без изменений ... */}
             <div className="luxury-filter-panel">
-
                 {isAdmin && (
-                    <>
-                        <div className="filter-group">
-                            <span className="filter-hint">ID Букета</span>
-                            <input
-                                type="number"
-                                className="filter-input-short"
-                                value={searchId}
-                                onChange={(e) => setSearchId(e.target.value)}
-                                placeholder="0"
-                            />
-                        </div>
-
-                        <div className="filter-group">
-                            <span className="filter-hint">Статус</span>
-                            <select
-                                className="filter-select-luxury"
-                                value={filterStatus}
-                                onChange={(e) => setFilterStatus(e.target.value)}
-                            >
-                                <option value="ALL">Все статусы</option>
-                                <option value="ACTIVE">В продаже</option>
-                                <option value="HIDDEN">В архиве</option>
-                            </select>
-                        </div>
-                    </>
+                    <div className="filter-group">
+                        <span className="filter-hint">Статус</span>
+                        <select
+                            className="filter-select-luxury"
+                            value={filterStatus}
+                            onChange={(e) => setFilterStatus(e.target.value)}
+                        >
+                            <option value="ALL">Все статусы</option>
+                            <option value="ACTIVE">В продаже</option>
+                            <option value="HIDDEN">В архиве</option>
+                        </select>
+                    </div>
                 )}
 
                 <div className="filter-group">
@@ -150,7 +156,7 @@ const BouquetGallery = ({ isAdmin = false, user }) => {
                                         onChange={() => toggleFlowerFilter(f.id)}
                                     />
                                     <span className="flower-name">
-                                        {f.name} <small style={{color: '#888'}}>({f.color})</small>
+                                        {f.name} <small style={{color: '#888'}}>({getRussianColor(f.color)})</small>
                                     </span>
                                 </label>
                             ))}
@@ -165,14 +171,19 @@ const BouquetGallery = ({ isAdmin = false, user }) => {
                         <div className="card-image-wrapper">
                             <img src={b.pathPhoto || 'https://via.placeholder.com/300'} alt={b.name} className="card-img" />
                             {isAdmin && (
-                                <span className={`card-status-badge ${b.active ? 'active' : 'hidden'}`}>
-                                    {b.active ? 'Доступен' : 'Архив'}
-                                </span>
+                                <>
+                                    <span className={`card-status-badge ${b.active ? 'active' : 'hidden'}`}>
+                                        {b.active ? 'Доступен' : 'Архив'}
+                                    </span>
+                                    <button className="edit-icon-btn" onClick={() => onEdit(b)} title="Редактировать">
+                                        ✎
+                                    </button>
+                                </>
                             )}
                         </div>
                         <div className="card-content">
                             <div className="card-info-top">
-                                <span>{isAdmin ? `B-ID: ${b.id}` : ''}</span>
+                                <span></span>
                                 <button className="composition-toggle-btn" onClick={() => toggleComposition(b.id)}>
                                     {openedComposition === b.id ? 'Скрыть состав' : 'Показать состав'}
                                 </button>
@@ -186,7 +197,7 @@ const BouquetGallery = ({ isAdmin = false, user }) => {
                                         {b.flowers && b.flowers.length > 0 ? (
                                             b.flowers.map((f, i) => (
                                                 <li key={i}>
-                                                    • {f.name} <span className="f-color">({f.color})</span>
+                                                    • {f.name} <span className="f-color">({getRussianColor(f.color)})</span>
                                                 </li>
                                             ))
                                         ) : (

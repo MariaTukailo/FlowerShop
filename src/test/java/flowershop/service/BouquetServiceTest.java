@@ -234,4 +234,98 @@ class BouquetServiceTest {
         assertEquals(0.0, result.getPrice());
         verify(bouquetRepository).save(any());
     }
+
+    // --- ТЕСТЫ ДЛЯ updatePartial ---
+
+    @Test
+    void updatePartial_AllFieldsSuccess() {
+        // Настройка
+        when(bouquetRepository.findById(1L)).thenReturn(Optional.of(bouquet));
+        when(bouquetRepository.save(any(Bouquet.class))).thenAnswer(i -> i.getArguments()[0]);
+
+        // Действие
+        BouquetDto result = bouquetService.updatePartial(1L, false, 99.99, "new/path.jpg");
+
+        // Проверка
+        assertNotNull(result);
+        assertFalse(bouquet.isActive());
+        assertEquals(99.99, bouquet.getPrice());
+        assertEquals("new/path.jpg", bouquet.getPathPhoto());
+        verify(bouquetRepository).save(bouquet);
+    }
+
+    @Test
+    void updatePartial_OnlyPriceProvided() {
+        // Настройка (в setUp уже есть фото "Весенний" и цена 50.0)
+        String originalPhoto = bouquet.getPathPhoto();
+        when(bouquetRepository.findById(1L)).thenReturn(Optional.of(bouquet));
+        when(bouquetRepository.save(any(Bouquet.class))).thenAnswer(i -> i.getArguments()[0]);
+
+        // Обновляем только цену
+        bouquetService.updatePartial(1L, null, 150.0, null);
+
+        assertEquals(150.0, bouquet.getPrice());
+        assertTrue(bouquet.isActive()); // Остался прежним
+        assertEquals(originalPhoto, bouquet.getPathPhoto()); // Не изменилось
+    }
+
+    @Test
+    void updatePartial_BlankPhoto_ShouldNotUpdate() {
+        bouquet.setPathPhoto("original.jpg");
+        when(bouquetRepository.findById(1L)).thenReturn(Optional.of(bouquet));
+        when(bouquetRepository.save(any(Bouquet.class))).thenAnswer(i -> i.getArguments()[0]);
+
+        // Передаем пустую строку в фото
+        bouquetService.updatePartial(1L, null, null, "   ");
+
+        assertEquals("original.jpg", bouquet.getPathPhoto());
+    }
+
+    @Test
+    void updatePartial_NotFound() {
+        when(bouquetRepository.findById(99L)).thenReturn(Optional.empty());
+
+        assertThrows(EntityNotFoundException.class,
+                () -> bouquetService.updatePartial(99L, true, 10.0, "photo.jpg"));
+
+        verify(bouquetRepository, never()).save(any());
+    }
+
+    // --- ДОПОЛНИТЕЛЬНЫЕ ПРОВЕРКИ ЛОГИКИ ---
+
+    @Test
+    void updateStatus_SetActive_Failure_WithMixedActiveAndInactiveFlowers() {
+        // Один цветок активен, второй - нет
+        Flower activeF = new Flower(); activeF.setActive(true);
+        Flower inactiveF = new Flower(); inactiveF.setActive(false);
+        bouquet.setFlowers(new ArrayList<>(List.of(activeF, inactiveF)));
+
+        when(bouquetRepository.findById(1L)).thenReturn(Optional.of(bouquet));
+
+        // Если логика метода updateStatus запрещает активацию при наличии неактивных цветов
+        bouquetService.updateStatus(1L, true);
+
+        // Проверяем, что статус НЕ изменился (остался false, если он был false, или логика прервалась)
+        // В твоем коде выше в тесте 'updateStatus_SetActive_Failure_DueToInactiveFlowers'
+        // ты проверяла, что save не вызывался.
+        verify(bouquetRepository, never()).save(any());
+    }
+
+    @Test
+    void create_WithVeryLargePrice_ShouldSaveCorrectly() {
+        // Проверка на точность Double (хотя для денег лучше BigDecimal, но проверяем твой тип)
+        flower.setPrice(999999.99);
+        FlowerDto fDto = new FlowerDto(); fDto.setId(1L);
+
+        BouquetDto dto = new BouquetDto();
+        dto.setName("Luxury Bouquet");
+        dto.setFlowers(List.of(fDto));
+
+        when(flowerRepository.findAllById(any())).thenReturn(List.of(flower));
+        when(bouquetRepository.save(any())).thenAnswer(i -> i.getArguments()[0]);
+
+        BouquetDto result = bouquetService.create(dto);
+
+        assertEquals(999999.99, result.getPrice());
+    }
 }

@@ -1,11 +1,9 @@
-
 html, body {
     margin: 0;
     padding: 0;
     background-color: #f7f3e8 !important;
     min-height: 100vh;
 }
-
 
 .user-container {
     width: 100%;
@@ -16,18 +14,18 @@ html, body {
     min-height: 100vh;
 }
 
-
 .user-nav {
     margin-top: 20px;
     display: flex;
     justify-content: center;
-    gap: 80px;
+    gap: 80px; /* Твой оригинальный отступ */
     width: 100%;
     max-width: 1100px;
     border-bottom: 1px solid #e2d1c3;
     padding-bottom: 15px;
     position: relative;
     background-color: #f7f3e8 !important;
+    align-items: center; /* Центрируем иконку по вертикали с текстом */
 }
 
 .nav-btn {
@@ -43,8 +41,9 @@ html, body {
     padding: 10px 5px;
     position: relative;
     outline: none;
+    display: flex;
+    align-items: center;
 }
-
 
 .nav-btn::after {
     content: '';
@@ -67,17 +66,7 @@ html, body {
     font-weight: 600 !important;
 }
 
-
-.nav-cart-wrapper {
-    position: absolute;
-    right: 0;
-    bottom: 15px;
+/* Стили для иконки внутри кнопки, чтобы она не прыгала */
+.nav-btn svg {
+    display: block;
 }
-
-.cart-icon-btn {
-    background: none !important;
-    border: none !important;
-    cursor: pointer;
-    color: #333;
-}
-

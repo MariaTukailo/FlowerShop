@@ -1,172 +1,185 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import api from '../../api';
 import FlowerGallery from '../FlowerGallery';
 import './ManageFlowers.css';
 
 const ManageFlowers = () => {
+    // 1. Создаем стейт для цветов прямо здесь
+    const [flowers, setFlowers] = useState([]);
     const [activeOperation, setActiveOperation] = useState('findAll');
-
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingFlower, setEditingFlower] = useState(null);
-    const [editId, setEditId] = useState('');
 
-    const [newFlower, setNewFlower] = useState({
-        name: '',
-        price: '',
-        active: true,
-        pathPhoto: '',
-        color: 'красный'
+    const [flowerData, setFlowerData] = useState({
+        name: '', price: '', active: true, pathPhoto: '', color: 'красный'
     });
 
     const colorOptions = ['белый', 'желтый', 'розовый', 'красный', 'зеленый', 'черный'];
 
-    const handleCreateSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            await api.post('/flowers', {
-                ...newFlower,
-                price: Number(newFlower.price)
-            });
-            alert("Цветок успешно добавлен в базу!");
-            setNewFlower({ name: '', price: '', active: true, pathPhoto: '', color: 'красный' });
-            setActiveOperation('findAll');
-        } catch (error) {
-            alert("Ошибка валидации! Проверьте данные.");
-        }
+    // 2. Загружаем цветы при старте
+    useEffect(() => {
+        const fetchAll = async () => {
+            try {
+                const response = await api.get('/flowers');
+                setFlowers(response.data);
+            } catch (err) {
+                console.error("Ошибка загрузки:", err);
+            }
+        };
+        fetchAll();
+    }, []);
+
+    const handleEditClick = (flower) => {
+        setEditingFlower(flower);
+        setFlowerData({ ...flower }); // Копируем данные, чтобы не менять оригинал сразу
+        setIsModalOpen(true);
     };
 
-    const findForEdit = async (e) => {
-        e.preventDefault();
-        try {
-            const response = await api.get(`/flowers/${editId}`);
-            setEditingFlower(response.data);
-        } catch (error) {
-            alert("Цветок с таким ID не найден");
-        }
+    const handleAddClick = () => {
+        setEditingFlower(null);
+        setFlowerData({ name: '', price: '', active: true, pathPhoto: '', color: 'красный' });
+        setIsModalOpen(true);
     };
 
-    const handleUpdate = async (e) => {
+    const closeModal = () => {
+        setIsModalOpen(false);
+        setEditingFlower(null);
+    };
+
+    const handleInputChange = (e) => {
+        const { name, value, type, checked } = e.target;
+        const val = type === 'checkbox' ? checked : value;
+        setFlowerData(prev => ({ ...prev, [name]: val }));
+    };
+
+    // 3. УМНОЕ ОБНОВЛЕНИЕ БЕЗ ПЕРЕЗАГРУЗКИ
+    const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await api.put(`/flowers/${editingFlower.id}`, editingFlower);
-            alert("Данные обновлены");
-            setEditingFlower(null);
-            setActiveOperation('findAll');
+            const payload = { ...flowerData, price: Number(flowerData.price) };
+
+            if (editingFlower) {
+                // Если редактируем (используем PUT или PATCH)
+                const response = await api.put(`/flowers/${editingFlower.id}`, payload);
+
+                // Обновляем массив цветов: заменяем старый цветок новым из ответа сервера
+                setFlowers(prev => prev.map(f => f.id === editingFlower.id ? response.data : f));
+                alert("Данные успешно обновлены ✨");
+            } else {
+                // Если создаем новый
+                const response = await api.post('/flowers', payload);
+
+                // Добавляем новый цветок в список
+                setFlowers(prev => [...prev, response.data]);
+                alert("Цветок успешно добавлен!");
+            }
+
+            closeModal();
+            // window.location.reload(); <-- УДАЛЕНО! Теперь тебя не выкинет.
         } catch (error) {
-            alert("Ошибка при обновлении");
+            console.error(error);
+            alert("Ошибка при сохранении.");
         }
     };
 
     return (
         <div className="flowers-admin-panel">
             <div className="operations-grid">
-                <button className={`op-card ${activeOperation === 'findAll' ? 'active' : ''}`} onClick={() => setActiveOperation('findAll')}>
+                <div className={`op-card ${activeOperation === 'findAll' ? 'active' : ''}`} onClick={() => setActiveOperation('findAll')}>
                     <span className="op-label">Ассортимент</span>
                     <div className="op-indicator"></div>
-                </button>
-                <button className={`op-card ${activeOperation === 'create' ? 'active' : ''}`} onClick={() => setActiveOperation('create')}>
+                </div>
+                <div className="op-card" onClick={handleAddClick}>
                     <span className="op-label">Добавить новый</span>
                     <div className="op-indicator"></div>
-                </button>
-                <button className={`op-card ${activeOperation === 'update' ? 'active' : ''}`} onClick={() => setActiveOperation('update')}>
-                    <span className="op-label">Редактировать</span>
-                    <div className="op-indicator"></div>
-                </button>
+                </div>
             </div>
 
             <div className="operation-content">
-                {activeOperation === 'findAll' && (
-                    <FlowerGallery isAdmin={true} />
-                )}
+                {/* 4. Передаем наш стейт 'flowers' в галерею */}
+                <FlowerGallery
+                    flowers={flowers}
+                    isAdmin={true}
+                    onEdit={handleEditClick}
+                />
+            </div>
 
-                {activeOperation === 'create' && (
-                    <div className="form-container-luxury fade-in">
-                        <form className="flower-form-clean" onSubmit={handleCreateSubmit}>
-                            <div className="form-header">
-                                <h2 className="form-title-luxury">Новый цветок</h2>
-                            </div>
+            {/* ... остальная часть с модальным окном и формой без изменений ... */}
+            {isModalOpen && (
+                <div className="modal-overlay" onClick={closeModal}>
+                    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                        <button className="close-btn" onClick={closeModal}>&times;</button>
+
+                        <form className="flower-form-clean" onSubmit={handleSubmit}>
+                            <h2 className="form-title-luxury">
+                                {editingFlower ? 'Редактирование' : 'Новый цветок'}
+                            </h2>
+
                             <div className="form-grid">
-                                <div className="input-field-luxury">
+                                <div className="input-field-luxury full-width">
                                     <label>Название</label>
-                                    <input type="text" value={newFlower.name} onChange={(e) => setNewFlower({...newFlower, name: e.target.value})} required placeholder="от 2 до 30 симв." />
+                                    <input
+                                        name="name"
+                                        type="text"
+                                        value={flowerData.name}
+                                        onChange={handleInputChange}
+                                        required
+                                    />
                                 </div>
                                 <div className="input-field-luxury">
                                     <label>Цена (BYN)</label>
-                                    <input type="number" step="0.01" value={newFlower.price} onChange={(e) => setNewFlower({...newFlower, price: e.target.value})} required />
+                                    <input
+                                        name="price"
+                                        type="number" step="0.01"
+                                        value={flowerData.price}
+                                        onChange={handleInputChange}
+                                        required
+                                    />
                                 </div>
                                 <div className="input-field-luxury">
                                     <label>Оттенок</label>
-                                    <select value={newFlower.color} onChange={(e) => setNewFlower({...newFlower, color: e.target.value})}>
+                                    <select
+                                        name="color"
+                                        className="flower-select-luxury"
+                                        value={flowerData.color}
+                                        onChange={handleInputChange}
+                                    >
                                         {colorOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
-                                    </select>
-                                </div>
-                                <div className="input-field-luxury">
-                                    <label>Статус</label>
-                                    <select value={newFlower.active} onChange={(e) => setNewFlower({...newFlower, active: e.target.value === 'true'})}>
-                                        <option value="true">Активен (в продаже)</option>
-                                        <option value="false">Скрыт</option>
                                     </select>
                                 </div>
                                 <div className="input-field-luxury full-width">
                                     <label>URL фотографии</label>
-                                    <input type="text" value={newFlower.pathPhoto} onChange={(e) => setNewFlower({...newFlower, pathPhoto: e.target.value})} placeholder="https://..." />
+                                    <input
+                                        name="pathPhoto"
+                                        type="text"
+                                        value={flowerData.pathPhoto || ''}
+                                        onChange={handleInputChange}
+                                    />
+                                </div>
+
+                                <div className="input-field-luxury full-width">
+                                    <label className="status-toggle-wrapper">
+                                        <input
+                                            name="active"
+                                            type="checkbox"
+                                            checked={flowerData.active}
+                                            onChange={handleInputChange}
+                                        />
+                                        <span>Доступен для продажи</span>
+                                    </label>
                                 </div>
                             </div>
-                            <div className="form-actions">
-                                <button type="submit" className="submit-btn-luxury">Добавить в базу <div className="btn-line"></div></button>
+
+                            <div className="center-text" style={{marginTop:'30px'}}>
+                                <button type="submit" className="submit-btn-luxury">
+                                    {editingFlower ? 'Сохранить изменения' : 'Добавить цветок'}
+                                    <div className="btn-line"></div>
+                                </button>
                             </div>
                         </form>
                     </div>
-                )}
-
-                {activeOperation === 'update' && (
-                    <div className="form-container-luxury fade-in">
-                        {!editingFlower ? (
-                            <form className="search-form-luxury" onSubmit={findForEdit}>
-                                <div className="search-container-inner">
-                                    <span className="search-hint">Введите ID для редактирования</span>
-                                    <div className="search-field-group">
-                                        <input type="number" className="search-input-clean" value={editId} onChange={(e) => setEditId(e.target.value)} required />
-                                        <button type="submit" className="search-action-btn">Найти <div className="btn-underline"></div></button>
-                                    </div>
-                                </div>
-                            </form>
-                        ) : (
-                            <form className="flower-form-clean" onSubmit={handleUpdate}>
-                                <div className="form-header">
-                                    <h2 className="form-title-luxury">Редактирование цветка: #{editingFlower.id}</h2>
-                                </div>
-                                <div className="form-grid">
-                                    <div className="input-field-luxury">
-                                        <label>Название</label>
-                                        <input type="text" value={editingFlower.name} onChange={(e) => setEditingFlower({...editingFlower, name: e.target.value})} />
-                                    </div>
-                                    <div className="input-field-luxury">
-                                        <label>Цена</label>
-                                        <input type="number" step="0.01" value={editingFlower.price} onChange={(e) => setEditingFlower({...editingFlower, price: e.target.value})} />
-                                    </div>
-                                    <div className="input-field-luxury">
-                                        <label>Цвет</label>
-                                        <select value={editingFlower.color} onChange={(e) => setEditingFlower({...editingFlower, color: e.target.value})}>
-                                            {colorOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
-                                        </select>
-                                    </div>
-                                    <div className="input-field-luxury">
-                                        <label>Статус</label>
-                                        <select value={editingFlower.active} onChange={(e) => setEditingFlower({...editingFlower, active: e.target.value === 'true'})}>
-                                            <option value="true">Активен</option>
-                                            <option value="false">Скрыт</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div className="form-actions" style={{gap:'20px'}}>
-                                    <button type="submit" className="submit-btn-luxury">Сохранить <div className="btn-line"></div></button>
-                                    <button type="button" className="submit-btn-luxury" onClick={() => setEditingFlower(null)}>Назад <div className="btn-line"></div></button>
-                                </div>
-                            </form>
-                        )}
-                    </div>
-                )}
-            </div>
+                </div>
+            )}
         </div>
     );
 };

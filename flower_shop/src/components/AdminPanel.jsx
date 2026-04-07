@@ -5,20 +5,35 @@ import ManageBouquets from './admin/ManageBouquets';
 import ManageCustomers from './admin/ManageCustomers';
 import ManageOrders from './admin/ManageOrders';
 
-function AdminPanel({ onLogout }) {
+function AdminPanel() {
     const [adminTab, setAdminTab] = useState('flowers');
 
     return (
         <div className="admin-container">
             <nav className="admin-nav">
-                <button className={adminTab === 'flowers' ? 'nav-btn active' : 'nav-btn'} onClick={() => setAdminTab('flowers')}>Цветы</button>
-                <button className={adminTab === 'bouquets' ? 'nav-btn active' : 'nav-btn'} onClick={() => setAdminTab('bouquets')}>Букеты</button>
-                <button className={adminTab === 'customers' ? 'nav-btn active' : 'nav-btn'} onClick={() => setAdminTab('customers')}>Покупатели</button>
-                <button className={adminTab === 'orders' ? 'nav-btn active' : 'nav-btn'} onClick={() => setAdminTab('orders')}>Заказы</button>
-
-
-                <button className="nav-btn logout-btn-panel" onClick={onLogout}>
-                    ВЫХОД
+                <button
+                    className={adminTab === 'flowers' ? 'nav-btn active' : 'nav-btn'}
+                    onClick={() => setAdminTab('flowers')}
+                >
+                    Цветы
+                </button>
+                <button
+                    className={adminTab === 'bouquets' ? 'nav-btn active' : 'nav-btn'}
+                    onClick={() => setAdminTab('bouquets')}
+                >
+                    Букеты
+                </button>
+                <button
+                    className={adminTab === 'customers' ? 'nav-btn active' : 'nav-btn'}
+                    onClick={() => setAdminTab('customers')}
+                >
+                    Покупатели
+                </button>
+                <button
+                    className={adminTab === 'orders' ? 'nav-btn active' : 'nav-btn'}
+                    onClick={() => setAdminTab('orders')}
+                >
+                    Заказы
                 </button>
             </nav>
 

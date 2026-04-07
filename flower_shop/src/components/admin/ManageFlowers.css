@@ -1,11 +1,22 @@
-.flowers-admin-panel { padding: 10px 20px; width: 100%; }
+/* --- СБРОС СТАНДАРТНЫХ СТИЛЕЙ И РАМОК --- */
+input:focus, select:focus, button:focus, textarea:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
 
-
-.operations-grid { display: flex;
-    justify-content: center;
-    gap: 25px; width: 100%;
-    max-width: 1300px;
+.flowers-admin-panel {
+    padding: 20px;
+    width: 100%;
+    max-width: 1400px;
     margin: 0 auto;
+}
+
+/* --- ВЕРХНИЕ КНОПКИ (Карточки с рамкой) --- */
+.operations-grid {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    margin-bottom: 50px;
 }
 
 .op-card {
@@ -20,113 +31,209 @@
     cursor: pointer;
     transition: all 0.4s ease;
     position: relative;
-    border-radius: 4px;
+    border-radius: 2px;
 }
-.op-card.active { border-color: #000;
-    background: #fafafa; }
-.op-label { font-family: 'Segoe UI', sans-serif;
-    font-size: 13px;
+
+.op-card.active {
+    border-color: #bcaaa4;
+    background: #fafafa;
+}
+
+.op-label {
+    font-size: 11px;
     text-transform: uppercase;
     letter-spacing: 2px;
-    color: #444; }
-.op-indicator { position: absolute;
+    color: #8d6e63;
+}
+
+.op-indicator {
+    position: absolute;
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
     width: 0;
-    height: 3px;
-    background: #000;
-    transition: width 0.3s ease; }
-.op-card.active .op-indicator { width: 50%; }
+    height: 2px;
+    background: #bcaaa4;
+    transition: width 0.3s ease;
+}
 
+.op-card.active .op-indicator {
+    width: 40%;
+}
 
-.form-container-luxury { display: flex;
-    justify-content: center;
-    padding: 40px 20px; }
+/* --- СЕТКА: СТРОГО 4 В РЯД --- */
+.operation-content {
+    width: 100%;
+}
 
-.flower-form-clean { width: 100%;
-    max-width: 700px;
+.operation-content .bouquet-grid,
+.operation-content .gallery-container,
+.operation-content .flower-grid,
+.operation-content > div[style*="grid"] {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 25px !important;
+    width: 100% !important;
+}
+
+/* --- МОДАЛЬНОЕ ОКНО --- */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(30, 28, 26, 0.45);
+    backdrop-filter: blur(8px);
+    display: flex; justify-content: center; align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: #fff;
+    padding: 50px;
+    width: 90%;
+    max-width: 600px;
+    box-shadow: 0 30px 70px rgba(0,0,0,0.1);
+    position: relative; /* Чтобы крестик позиционировался относительно окна */
+}
+
+/* КРЕСТИК В ПРАВОМ ВЕРХНЕМ УГЛУ */
+.close-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 32px;
+    cursor: pointer;
+    color: #d7ccc8;
+    line-height: 1;
+    transition: color 0.3s;
+}
+
+.close-btn:hover {
+    color: #8d6e63;
+}
+
+/* --- ПОЛЯ ВВОДА И СЕЛЕКТЫ --- */
+.input-field-luxury {
     display: flex;
     flex-direction: column;
-    gap: 30px; }
+    gap: 8px;
+    border-bottom: 1px solid #f4f1ee;
+    padding-bottom: 8px;
+    margin-bottom: 20px;
+}
 
-.form-title-luxury { font-family: 'Georgia', serif;
-    font-size: 32px;
-    font-weight: 400;
-    text-align: center;
-    margin-bottom: 20px; }
-
-.form-grid { display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 40px; }
-
-.full-width { grid-column: span 2; }
-
-.input-field-luxury { display: flex;
-    flex-direction: column;
-    gap: 10px; border-bottom: 1px solid #e2d1c3;
-    padding-bottom: 5px; }
-
-.input-field-luxury label { font-size: 11px;
+.input-field-luxury label {
+    font-size: 9px;
     text-transform: uppercase;
-    letter-spacing: 1px;
-    color: #888; }
+    letter-spacing: 2px;
+    color: #bcaaa4;
+}
 
-.input-field-luxury input, .input-field-luxury select {
+.input-field-luxury input:not([type="checkbox"]),
+.flower-select-luxury {
     border: none !important;
-    outline: none !important;
     background: transparent !important;
     font-family: 'Georgia', serif;
     font-size: 18px;
+    color: #5d4037;
+    width: 100%;
+}
+
+.flower-select-luxury {
+    cursor: pointer;
     padding: 5px 0;
 }
 
+.flower-select-luxury option {
+    font-family: sans-serif;
+    font-size: 14px;
+    padding: 10px;
+    background: #fff;
+    color: #5d4037;
+}
 
-.submit-btn-luxury { background: none;
-    border: none;
-    font-size: 13px;
+/* --- ТЕГИ ЦВЕТОВ --- */
+.flower-tag {
+    background: #fdfaf9;
+    border: 1px solid #efe8e0;
+    padding: 6px 12px;
+    font-size: 10px;
+    text-transform: uppercase;
+    color: #8d6e63;
+    border-radius: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 5px 5px 0 0;
+}
+
+/* Маркер цвета (использует переменную из JS) */
+.flower-tag::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--tag-color, #bcaaa4);
+}
+
+.remove-flower {
+    cursor: pointer;
+    margin-left: 5px;
+    font-size: 14px;
+    color: #d7ccc8;
+}
+
+.remove-flower:hover { color: #8d6e63; }
+
+/* --- СТАТУСЫ И КНОПКИ --- */
+.status-toggle-wrapper {
+    display: flex; align-items: center; gap: 10px; margin-top: 10px;
+}
+
+.status-toggle-wrapper input { width: 16px; height: 16px; accent-color: #8d6e63; cursor: pointer; }
+
+.status-toggle-btn {
+    background: transparent;
+    border: 1px solid #efe8e0 !important;
+    color: #8d6e63;
+    padding: 15px 30px;
+    font-size: 11px;
     text-transform: uppercase;
     letter-spacing: 2px;
     cursor: pointer;
-    position: relative;
-    padding: 20px;
-    margin-top: 20px; }
+    transition: all 0.3s ease;
+}
 
-.btn-line { position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 30%; height: 1px;
-    background: #000;
-    transition: 0.3s; }
+.status-toggle-btn:hover { background: #fdfaf9; border-color: #bcaaa4 !important; }
+
+.status-toggle-btn.archived {
+    background: #f4f1ee;
+    color: #bcaaa4;
+    border-style: dashed !important;
+}
+
+.submit-btn-luxury {
+    background: none; border: none; font-size: 12px;
+    text-transform: uppercase; letter-spacing: 3px;
+    cursor: pointer; position: relative; padding: 15px; color: #8d6e63;
+}
+
+.btn-line {
+    position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+    width: 40px; height: 1px; background: #bcaaa4; transition: width 0.4s ease;
+}
 
 .submit-btn-luxury:hover .btn-line { width: 100%; }
 
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.full-width { grid-column: span 2; }
+.center-text { text-align: center; }
+.form-title-luxury { font-family: 'Georgia', serif; text-transform: uppercase; letter-spacing: 3px; color: #5d4037; margin-bottom: 25px; }
 
-.search-form-luxury {
-    width: 100%;
-    max-width: 500px;
-    margin: 0 auto; }
-
-.search-container-inner {
-    display: flex;
-    flex-direction: column;
-    gap: 15px; }
-
-.search-field-group {
-    display: flex;
-    border-bottom: 1px solid #000;
-    padding-bottom: 10px; }
-
-.search-input-clean { flex: 1;
-    border: none;
-    outline: none;
+.current-price-display {
     font-size: 24px;
-    font-family: 'Georgia'; }
-
-.search-action-btn { background: none;
-    border: none;
-    text-transform: uppercase;
-    cursor: pointer;
-    letter-spacing: 1px;
-    position: relative; }
+    color: #8d6e63;
+    font-family: 'Georgia', serif;
+    font-weight: 300;
+}
