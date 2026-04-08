@@ -29,7 +29,7 @@ public class BouquetService {
 
     private Bouquet findEntityById(Long id) {
         log.debug("Поиск букета по ID: {}", id);
-        return bouquetRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Букет с ID " + id + " не найден"));
+        return bouquetRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, " Букет с ID   " + id + " не найден"));
 
     }
 
@@ -130,7 +130,7 @@ public class BouquetService {
     public BouquetDto updatePartial(Long id, Boolean active, Double price, String pathPhoto) {
 
         Bouquet bouquet = bouquetRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Букет с ID " + id + " не   найден"));
+                .orElseThrow(() -> new EntityNotFoundException("Букет    с ID " + id + " не   найден"));
 
 
         if (active != null) {
