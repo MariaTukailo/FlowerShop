@@ -27,7 +27,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/bouquets")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class BouquetController {
 
     private final BouquetService bouquetService;

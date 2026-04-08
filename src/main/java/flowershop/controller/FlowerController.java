@@ -26,7 +26,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/flowers")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class FlowerController {
 
     private final FlowerService flowerService;

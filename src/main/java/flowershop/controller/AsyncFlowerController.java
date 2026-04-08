@@ -24,7 +24,7 @@ import static flowershop.enums.TaskStatus.ACCEPTED;
 @Tag(name = "Управление цветами(асинхронные операции)", description = "Методы для работы с ассортиментом магазина (асинхронные операции)")
 @RestController
 @RequestMapping("/flowers/async")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequiredArgsConstructor
 public class AsyncFlowerController {
 
