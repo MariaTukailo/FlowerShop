@@ -1,4 +1,3 @@
-
 input:focus, select:focus, button:focus, textarea:focus {
     outline: none !important;
     box-shadow: none !important;
@@ -11,71 +10,77 @@ input:focus, select:focus, button:focus, textarea:focus {
     margin: 0 auto;
 }
 
-
 .operations-grid {
     display: flex;
-    justify-content: center;
-    gap: 25px;
-    margin-bottom: 50px;
+    justify-content: space-between;
+    gap: 30px;
+    margin-bottom: 60px;
+    width: 100%;
 }
 
 .op-card {
     flex: 1;
-    max-width: 240px;
-    height: 70px;
-    background: #fff;
-    border: 1px solid #e2d1c3;
+    height: 90px;
+    background: #ffffff;
+    border: 1px solid #efe8e0;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: all 0.4s ease;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
-    border-radius: 2px;
+    border-radius: 0;
+    overflow: hidden;
+}
+
+.op-card:hover {
+    border-color: #bcaaa4;
+    background: #fdfaf9;
+    transform: translateY(-2px);
 }
 
 .op-card.active {
-    border-color: #bcaaa4;
+    border-color: #8d6e63;
     background: #fafafa;
+    box-shadow: 0 10px 30px rgba(141, 110, 99, 0.05);
+}
+
+.add-new-btn {
+    border-style: dashed;
 }
 
 .op-label {
-    font-size: 11px;
+    font-size: 13px;
     text-transform: uppercase;
-    letter-spacing: 2px;
+    letter-spacing: 4px;
     color: #8d6e63;
+    font-weight: 300;
 }
 
 .op-indicator {
     position: absolute;
     bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
+    left: 0;
     width: 0;
-    height: 2px;
-    background: #bcaaa4;
-    transition: width 0.3s ease;
+    height: 3px;
+    background: #8d6e63;
+    transition: width 0.6s ease;
 }
 
 .op-card.active .op-indicator {
-    width: 40%;
+    width: 100%;
 }
-
 
 .operation-content {
     width: 100%;
 }
 
-.operation-content .bouquet-grid,
-.operation-content .gallery-container,
-.operation-content .flower-grid,
-.operation-content > div[style*="grid"] {
+.operation-content .flower-grid {
     display: grid !important;
     grid-template-columns: repeat(4, 1fr) !important;
     gap: 25px !important;
     width: 100% !important;
 }
-
 
 .modal-overlay {
     position: fixed;
@@ -95,7 +100,6 @@ input:focus, select:focus, button:focus, textarea:focus {
     position: relative;
 }
 
-
 .close-btn {
     position: absolute;
     top: 20px;
@@ -106,13 +110,7 @@ input:focus, select:focus, button:focus, textarea:focus {
     cursor: pointer;
     color: #d7ccc8;
     line-height: 1;
-    transition: color 0.3s;
 }
-
-.close-btn:hover {
-    color: #8d6e63;
-}
-
 
 .input-field-luxury {
     display: flex;
@@ -140,77 +138,8 @@ input:focus, select:focus, button:focus, textarea:focus {
     width: 100%;
 }
 
-.flower-select-luxury {
-    cursor: pointer;
-    padding: 5px 0;
-}
-
-.flower-select-luxury option {
-    font-family: sans-serif;
-    font-size: 14px;
-    padding: 10px;
-    background: #fff;
-    color: #5d4037;
-}
-
-
-.flower-tag {
-    background: #fdfaf9;
-    border: 1px solid #efe8e0;
-    padding: 6px 12px;
-    font-size: 10px;
-    text-transform: uppercase;
-    color: #8d6e63;
-    border-radius: 20px;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin: 5px 5px 0 0;
-}
-
-
-.flower-tag::before {
-    content: '';
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-
-}
-
-.remove-flower {
-    cursor: pointer;
-    margin-left: 5px;
-    font-size: 14px;
-    color: #d7ccc8;
-}
-
-.remove-flower:hover { color: #8d6e63; }
-
-
 .status-toggle-wrapper {
     display: flex; align-items: center; gap: 10px; margin-top: 10px;
-}
-
-.status-toggle-wrapper input { width: 16px; height: 16px; accent-color: #8d6e63; cursor: pointer; }
-
-.status-toggle-btn {
-    background: transparent;
-    border: 1px solid #efe8e0 !important;
-    color: #8d6e63;
-    padding: 15px 30px;
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.status-toggle-btn:hover { background: #fdfaf9; border-color: #bcaaa4 !important; }
-
-.status-toggle-btn.archived {
-    background: #f4f1ee;
-    color: #bcaaa4;
-    border-style: dashed !important;
 }
 
 .submit-btn-luxury {
@@ -230,10 +159,3 @@ input:focus, select:focus, button:focus, textarea:focus {
 .full-width { grid-column: span 2; }
 .center-text { text-align: center; }
 .form-title-luxury { font-family: 'Georgia', serif; text-transform: uppercase; letter-spacing: 3px; color: #5d4037; margin-bottom: 25px; }
-
-.current-price-display {
-    font-size: 24px;
-    color: #8d6e63;
-    font-family: 'Georgia', serif;
-    font-weight: 300;
-}

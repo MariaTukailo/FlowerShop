@@ -4,18 +4,15 @@ import FlowerGallery from '../FlowerGallery';
 import './ManageFlowers.css';
 
 const ManageFlowers = () => {
-
     const [flowers, setFlowers] = useState([]);
     const [activeOperation, setActiveOperation] = useState('findAll');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingFlower, setEditingFlower] = useState(null);
-
     const [flowerData, setFlowerData] = useState({
         name: '', price: '', active: true, pathPhoto: '', color: 'красный'
     });
 
     const colorOptions = ['белый', 'желтый', 'розовый', 'красный', 'зеленый', 'черный'];
-
 
     useEffect(() => {
         const fetchAll = async () => {
@@ -23,7 +20,7 @@ const ManageFlowers = () => {
                 const response = await api.get('/flowers');
                 setFlowers(response.data);
             } catch (err) {
-                console.error("Ошибка загрузки:", err);
+                console.error(err);
             }
         };
         fetchAll();
@@ -52,50 +49,40 @@ const ManageFlowers = () => {
         setFlowerData(prev => ({ ...prev, [name]: val }));
     };
 
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
             const payload = { ...flowerData, price: Number(flowerData.price) };
-
             if (editingFlower) {
-
                 const response = await api.put(`/flowers/${editingFlower.id}`, payload);
-
                 setFlowers(prev => prev.map(f => f.id === editingFlower.id ? response.data : f));
-                alert("Данные успешно обновлены ✨");
             } else {
-
                 const response = await api.post('/flowers', payload);
-
-
                 setFlowers(prev => [...prev, response.data]);
-                alert("Цветок успешно добавлен!");
             }
-
             closeModal();
-
         } catch (error) {
             console.error(error);
-            alert("Ошибка при сохранении.");
         }
     };
 
     return (
         <div className="flowers-admin-panel">
             <div className="operations-grid">
-                <div className={`op-card ${activeOperation === 'findAll' ? 'active' : ''}`} onClick={() => setActiveOperation('findAll')}>
-                    <span className="op-label">Ассортимент</span>
+                <div
+                    className={`op-card ${activeOperation === 'findAll' ? 'active' : ''}`}
+                    onClick={() => setActiveOperation('findAll')}
+                >
+                    <span className="op-label">Просмотр ассортимента</span>
                     <div className="op-indicator"></div>
                 </div>
-                <div className="op-card" onClick={handleAddClick}>
-                    <span className="op-label">Добавить новый</span>
+                <div className="op-card add-new-btn" onClick={handleAddClick}>
+                    <span className="op-label">Добавить новый цветок</span>
                     <div className="op-indicator"></div>
                 </div>
             </div>
 
             <div className="operation-content">
-
                 <FlowerGallery
                     flowers={flowers}
                     isAdmin={true}
@@ -103,17 +90,14 @@ const ManageFlowers = () => {
                 />
             </div>
 
-
             {isModalOpen && (
                 <div className="modal-overlay" onClick={closeModal}>
                     <div className="modal-content" onClick={(e) => e.stopPropagation()}>
                         <button className="close-btn" onClick={closeModal}>&times;</button>
-
                         <form className="flower-form-clean" onSubmit={handleSubmit}>
                             <h2 className="form-title-luxury">
                                 {editingFlower ? 'Редактирование' : 'Новый цветок'}
                             </h2>
-
                             <div className="form-grid">
                                 <div className="input-field-luxury full-width">
                                     <label>Название</label>
@@ -155,7 +139,6 @@ const ManageFlowers = () => {
                                         onChange={handleInputChange}
                                     />
                                 </div>
-
                                 <div className="input-field-luxury full-width">
                                     <label className="status-toggle-wrapper">
                                         <input
@@ -168,7 +151,6 @@ const ManageFlowers = () => {
                                     </label>
                                 </div>
                             </div>
-
                             <div className="center-text" style={{marginTop:'30px'}}>
                                 <button type="submit" className="submit-btn-luxury">
                                     {editingFlower ? 'Сохранить изменения' : 'Добавить цветок'}
