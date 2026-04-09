@@ -19,12 +19,10 @@ const AdminOrders = () => {
     const fetchData = async () => {
         try {
             setLoading(true);
-
             const [ordersRes, customersRes] = await Promise.all([
                 api.get('/orders'),
                 api.get('/customers')
             ]);
-
 
             const customerMap = {};
             customersRes.data.forEach(c => {
@@ -38,7 +36,7 @@ const AdminOrders = () => {
             }));
             setOrders(normalizedData);
         } catch (e) {
-            console.error("Ошибка загрузки:", e);
+            console.error(e);
         } finally {
             setLoading(false);
         }
@@ -53,7 +51,6 @@ const AdminOrders = () => {
             await api.patch(`/orders/${orderId}/status`, null, {
                 params: { status: newStatus }
             });
-
             setOrders(prev => prev.map(o =>
                 o.id === orderId ? { ...o, status: newStatus } : o
             ));
@@ -71,14 +68,16 @@ const AdminOrders = () => {
 
     return (
         <div className="flowers-admin-panel fade-in">
-            <div className="operation-content" style={{ padding: '20px 40px' }}>
-
-
-
+            <div className="operation-content">
                 <div className="luxury-filter-panel">
                     <div className="filter-group">
                         <label className="filter-hint">ДАТА ДОСТАВКИ</label>
-                        <input type="date" className="filter-input-medium" value={searchDate} onChange={e => setSearchDate(e.target.value)} />
+                        <input
+                            type="date"
+                            className="filter-input-medium"
+                            value={searchDate}
+                            onChange={e => setSearchDate(e.target.value)}
+                        />
                     </div>
 
                     <div className="filter-group">
@@ -117,7 +116,6 @@ const AdminOrders = () => {
                                 <tr key={order.id}>
                                     <td className="id-cell">#{order.id}</td>
                                     <td className="date-cell">{order.deliveryDate}</td>
-
                                     <td className="name-cell">
                                         {customers[order.customerId] || `Клиент #${order.customerId}`}
                                     </td>

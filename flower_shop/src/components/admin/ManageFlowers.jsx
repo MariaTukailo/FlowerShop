@@ -73,11 +73,11 @@ const ManageFlowers = () => {
                     className={`op-card ${activeOperation === 'findAll' ? 'active' : ''}`}
                     onClick={() => setActiveOperation('findAll')}
                 >
-                    <span className="op-label">Просмотр ассортимента</span>
+                    <span className="op-label">Ассортимента</span>
                     <div className="op-indicator"></div>
                 </div>
                 <div className="op-card add-new-btn" onClick={handleAddClick}>
-                    <span className="op-label">Добавить новый цветок</span>
+                    <span className="op-label">Создать новый</span>
                     <div className="op-indicator"></div>
                 </div>
             </div>

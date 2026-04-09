@@ -1,4 +1,3 @@
-
 .fade-in {
     animation: fadeIn 0.5s ease-in-out;
 }
@@ -8,7 +7,7 @@
     to { opacity: 1; transform: translateY(0); }
 }
 
-.manage-orders-container {
+.flowers-admin-panel {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -17,6 +16,14 @@
     box-sizing: border-box;
 }
 
+.operation-content {
+    width: 100%;
+    max-width: 1300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 0;
+}
 
 .luxury-filter-panel {
     display: flex;
@@ -27,13 +34,11 @@
     padding: 25px 40px;
     border-radius: 18px;
     box-shadow: 0 6px 20px rgba(0,0,0,0.04);
-    margin-bottom: 25px;
-
-    width: 95%;
+    margin: 0 auto 25px auto;
+    width: 100%;
     max-width: 1300px;
     box-sizing: border-box;
 }
-
 
 .table-container-luxury {
     background: white;
@@ -41,12 +46,10 @@
     overflow: hidden;
     box-shadow: 0 12px 40px rgba(0,0,0,0.06);
     border: 1px solid #f0f0f0;
-
-    width: 95%;
+    width: 100%;
     max-width: 1300px;
     margin: 0 auto;
 }
-
 
 .luxury-table {
     width: 100%;
@@ -68,7 +71,6 @@
     color: #a0a0a0;
 }
 
-
 .filter-group {
     display: flex;
     flex-direction: column;
@@ -83,7 +85,7 @@
     font-weight: 700;
 }
 
-.filter-input-medium, .filter-input-short {
+.filter-input-medium {
     border: none;
     border-bottom: 1px solid #e5e5e5;
     padding: 10px 0;
@@ -93,6 +95,33 @@
     background: transparent;
 }
 
+.luxury-action-btn {
+    background: none;
+    border: none;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    cursor: pointer;
+    position: relative;
+    padding: 10px;
+    color: #bfa37e;
+    font-weight: 700;
+}
+
+.btn-line {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 1px;
+    background: #bfa37e;
+    transition: width 0.3s ease;
+}
+
+.luxury-action-btn:hover .btn-line {
+    width: 100%;
+}
 
 .status-select-luxury {
     border: none;
@@ -112,7 +141,6 @@
 
 .id-cell { font-family: 'Courier New', monospace; color: #bfa37e; font-weight: 800; }
 .name-cell { font-weight: 600; color: #2c3e50; }
-
-.text-right {
-    text-align: center;
-}
+.price-cell { color: #5d4037; }
+.text-right { text-align: center; }
+.no-data-text { padding: 40px; color: #a0a0a0; font-style: italic; }
